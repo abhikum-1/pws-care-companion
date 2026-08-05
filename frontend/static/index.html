@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PWS Care Companion - Role Privilege Matrix UI</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Material+Symbols+Outlined">
+<style>
+  :root {
+    --accent: #0d9488;
+    --accent-light: #2dd4bf;
+    --accent-glow: rgba(45, 212, 191, 0.15);
+    --bg-dark: #0f172a;
+    --card-bg: #1e293b;
+    --card-hover: #334155;
+    --border: #334155;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --alert-red: #ef4444;
+    --alert-bg: rgba(239, 68, 68, 0.12);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* --- Top Header Bar --- */
+  header {
+    background: #1e293b;
+    border-bottom: 1px solid var(--border);
+    padding: 0.8rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    z-index: 10;
+  }
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .header-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--accent-light);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .patient-badge {
+    background: var(--accent-glow);
+    border: 1px solid var(--accent);
+    color: var(--accent-light);
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 0.25rem 0.65rem;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .role-selector {
+    background: #0f172a;
+    color: #2dd4bf;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+  }
+  .role-selector:focus {
+    box-shadow: 0 0 0 2px rgba(45, 212, 191, 0.3);
+  }
+
+  .emergency-btn {
+    background: var(--alert-bg);
+    border: 1px solid var(--alert-red);
+    color: #fca5a5;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s ease;
+  }
+  .emergency-btn:hover {
+    background: var(--alert-red);
+    color: #fff;
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+  }
+
+  /* --- Main Workspace Layout --- */
+  .app-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* --- Left: Chat Area --- */
+  .chat-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border);
+    position: relative;
+    background: #0b1120;
+  }
+
+  #log {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    scroll-behavior: smooth;
+  }
+
+  .welcome-card {
+    background: linear-gradient(135deg, rgba(30,41,59,0.8), rgba(15,23,42,0.9));
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.25rem;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
+  .welcome-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent-light);
+    margin-bottom: 0.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .welcome-desc {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .msg {
+    display: flex;
+    flex-direction: column;
+    max-width: 85%;
+  }
+  .msg.user { align-self: flex-end; }
+  .msg.agent { align-self: flex-start; }
+
+  .bubble {
+    padding: 0.9rem 1.2rem;
+    border-radius: 14px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    font-size: 0.96rem;
+    line-height: 1.55;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    white-space: pre-wrap;
+  }
+  .msg.user .bubble {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 14px 14px 2px 14px;
+  }
+  .msg.agent .bubble { border-radius: 14px 14px 14px 2px; }
+  .bubble.rich {
+    background: transparent;
+    border: none;
+    padding: 0;
+    box-shadow: none;
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  /* Quick Actions Bar */
+  .quick-bar {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding: 0.75rem 1.25rem;
+    background: var(--bg-dark);
+    border-top: 1px solid var(--border);
+    scrollbar-width: thin;
+  }
+  .chip {
+    background: var(--card-bg);
+    color: #cbd5e1;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 0.45rem 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .chip:hover {
+    background: var(--card-hover);
+    color: var(--accent-light);
+    border-color: var(--accent-light);
+    transform: translateY(-1px);
+  }
+
+  /* Form / Input */
+  form {
+    display: flex;
+    gap: 0.6rem;
+    padding: 1rem 1.25rem;
+    background: #1e293b;
+    border-top: 1px solid var(--border);
+  }
+  input {
+    flex: 1;
+    padding: 0.85rem 1.1rem;
+    border: 1px solid var(--border);
+    background: #0f172a;
+    color: #fff;
+    border-radius: 10px;
+    font-size: 0.98rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  input:focus {
+    border-color: var(--accent-light);
+    box-shadow: 0 0 0 2px rgba(45, 212, 191, 0.2);
+  }
+  button.send-btn {
+    padding: 0.85rem 1.5rem;
+    border: none;
+    border-radius: 10px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: background 0.2s;
+  }
+  button.send-btn:hover { background: #14b8a6; }
+
+  /* --- Right: Live Care Dashboard Panel --- */
+  .dashboard-panel {
+    width: 380px;
+    background: #0f172a;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem;
+    overflow-y: auto;
+  }
+
+  .dash-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+  .dash-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--accent-light);
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Calorie Ring Widget */
+  .calorie-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .calorie-ring {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: conic-gradient(var(--accent) 50%, #334155 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .calorie-ring-inner {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--card-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+  .calorie-stats {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+  }
+  .stat-row { display: flex; justify-content: space-between; color: var(--text-secondary); }
+  .stat-val { font-weight: 600; color: var(--text-primary); }
+
+  /* Activity Feed Widget */
+  .feed-list { display: flex; flex-direction: column; gap: 0.65rem; }
+  .feed-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .feed-item:last-child { border-bottom: none; }
+  .feed-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Appointments Widget */
+  .appt-item {
+    background: #0f172a;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .appt-header { display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 0.88rem; color: #f8fafc; }
+  .appt-time { font-size: 0.8rem; color: var(--accent-light); display: flex; align-items: center; gap: 0.3rem; }
+
+  /* A2UI Component Renderer Styles */
+  .a2card {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.2rem;
+    background: var(--card-bg);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+    max-width: 100%;
+  }
+  .a2card + .a2card, .a2col > .a2card { margin-top: 0.8rem; }
+  .a2col { display: flex; flex-direction: column; gap: 0.6rem; }
+  .a2row { display: flex; flex-direction: row; gap: 0.8rem; align-items: center; flex-wrap: wrap; }
+  .a2row.between { justify-content: space-between; }
+  .a2text { margin: 0; line-height: 1.5; color: var(--text-primary); }
+  .a2text.a2-h1 { font-size: 1.5rem; font-weight: 700; color: var(--accent-light); }
+  .a2text.a2-h2 { font-size: 1.25rem; font-weight: 700; color: var(--accent-light); }
+  .a2text.a2-h3 { font-size: 1.1rem; font-weight: 600; color: #cbd5e1; }
+  .a2text.a2-caption { font-size: 0.85rem; color: var(--text-secondary); }
+  .a2divider { border: none; border-top: 1px solid var(--border); margin: 0.5rem 0; width: 100%; }
+  .a2img { max-width: 100%; border-radius: 10px; display: block; }
+  .material-symbols-outlined { font-family: 'Material Symbols Outlined'; font-size: 1.25rem; line-height: 1; vertical-align: middle; color: var(--accent-light); }
+
+  /* Modal Sheet */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-box {
+    background: #1e293b;
+    border: 2px solid var(--alert-red);
+    border-radius: 16px;
+    width: 90%;
+    max-width: 600px;
+    padding: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+  .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 0.8rem; margin-bottom: 1rem; }
+  .modal-title { font-size: 1.2rem; font-weight: 700; color: #fca5a5; display: flex; align-items: center; gap: 0.5rem; }
+  .modal-close { background: transparent; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer; }
+
+  @media (max-width: 900px) {
+    .dashboard-panel { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <div class="header-title">🩺 PWS Care Companion</div>
+    <div class="patient-badge">
+      <span class="material-symbols-outlined" style="font-size:1rem;">child_care</span>
+      Leo (Stage 1b Toddler, 13m)
+    </div>
+  </div>
+  <div style="display:flex; gap:0.6rem; align-items:center;">
+    <!-- Role Selector Dropdown -->
+    <select id="roleSelect" class="role-selector" onchange="switchRole(this.value)">
+      <option value="Admin">👑 Admin (Parent)</option>
+      <option value="Caregiver">🤲 Caregiver (Babysitter / Family)</option>
+      <option value="Specialist">🩺 Specialist (PT / OT / Dietitian)</option>
+    </select>
+    <button type="button" class="emergency-btn" style="background:#334155; border-color:#475569; color:#f8fafc;" onclick="resetChatSession()">
+      <span class="material-symbols-outlined">refresh</span>
+      New Session
+    </button>
+    <button type="button" class="emergency-btn" onclick="openEmergencyModal()">
+      <span class="material-symbols-outlined">warning</span>
+      Medical Alert Protocol
+    </button>
+  </div>
+</header>
+
+<div class="app-container">
+  <!-- Left Panel: Conversational AI Agent -->
+  <div class="chat-panel">
+    <div id="log">
+      <div class="welcome-card" id="welcomeCard">
+        <div class="welcome-title" id="welcomeTitle">
+          <span class="material-symbols-outlined">shield_person</span>
+          Active Role: Admin (Parent)
+        </div>
+        <div class="welcome-desc" id="welcomeDesc">
+          Full management privileges active: Add appointments, edit child profile, log medications, invite caregivers, and search grounded PWS medical guidelines.
+        </div>
+      </div>
+    </div>
+
+    <!-- Dynamic Quick Actions Bar -->
+    <div class="quick-bar" id="quickBar"></div>
+
+    <form id="form">
+      <input id="input" placeholder="Ask a PWS medical question or manage care records..." autocomplete="off" autofocus>
+      <button type="submit" class="send-btn">
+        <span>Send</span>
+        <span class="material-symbols-outlined" style="font-size:1.1rem;">send</span>
+      </button>
+    </form>
+  </div>
+
+  <!-- Right Panel: Live Care Dashboard -->
+  <div class="dashboard-panel">
+    <!-- Calorie Tracker Widget -->
+    <div class="dash-card">
+      <div class="dash-title">
+        <span>⚡ Daily Calorie Tracker</span>
+        <span style="font-size:0.8rem; color:var(--accent-light);">Target: 1200 kcal</span>
+      </div>
+      <div class="calorie-container">
+        <div class="calorie-ring">
+          <div class="calorie-ring-inner">
+            <span>600</span>
+            <span style="font-size:0.65rem; color:var(--text-secondary);">kcal</span>
+          </div>
+        </div>
+        <div class="calorie-stats">
+          <div class="stat-row"><span>Consumed:</span><span class="stat-val">600 kcal</span></div>
+          <div class="stat-row"><span>Remaining:</span><span class="stat-val" style="color:var(--accent-light);">600 kcal</span></div>
+          <div class="stat-row"><span>Phase:</span><span class="stat-val">Stage 1b</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Family Live Feed Widget -->
+    <div class="dash-card">
+      <div class="dash-title">
+        <span>👥 Family Activity Feed</span>
+        <span class="material-symbols-outlined" style="font-size:1rem;">sync</span>
+      </div>
+      <div class="feed-list">
+        <div class="feed-item">
+          <div class="feed-avatar">M</div>
+          <div><strong>Mom</strong> logged breakfast (250 kcal) <br><span style="font-size:0.75rem; color:var(--text-secondary);">8:15 AM</span></div>
+        </div>
+        <div class="feed-item">
+          <div class="feed-avatar" style="background:#8b5cf6;">D</div>
+          <div><strong>Dad</strong> added Dr. XYZ appointment <br><span style="font-size:0.75rem; color:var(--text-secondary);">9:30 AM</span></div>
+        </div>
+        <div class="feed-item">
+          <div class="feed-avatar" style="background:#ec4899;">S</div>
+          <div><strong>Sarah (PT)</strong> completed Physical Therapy <br><span style="font-size:0.75rem; color:var(--text-secondary);">11:00 AM</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upcoming Medical Appointments Widget -->
+    <div class="dash-card">
+      <div class="dash-title">
+        <span>📅 Upcoming Care Schedule</span>
+        <span class="material-symbols-outlined" style="font-size:1rem;">event</span>
+      </div>
+      <div class="appt-item" onclick="sendQuick('Show me upcoming appointments')" style="cursor:pointer;">
+        <div class="appt-header">
+          <span>Dr. XYZ (Endocrinologist)</span>
+          <span style="color:#38bdf8; font-size:0.75rem;">In 25 days</span>
+        </div>
+        <div class="appt-time">
+          <span class="material-symbols-outlined" style="font-size:0.9rem;">schedule</span>
+          Aug 30, 2026 @ 9:00 AM
+        </div>
+        <div style="font-size:0.78rem; color:var(--text-secondary);">City Children's Hospital</div>
+      </div>
+      <div class="appt-item" onclick="sendQuick('Show me upcoming appointments')" style="cursor:pointer;">
+        <div class="appt-header">
+          <span>Sarah Jenkins, RD</span>
+          <span style="color:#38bdf8; font-size:0.75rem;">In 31 days</span>
+        </div>
+        <div class="appt-time">
+          <span class="material-symbols-outlined" style="font-size:0.9rem;">schedule</span>
+          Sept 05, 2026 @ 2:00 PM
+        </div>
+        <div style="font-size:0.78rem; color:var(--text-secondary);">Pediatric Nutrition Clinic</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Medical Alert Protocol Modal -->
+<div class="modal-overlay" id="alertModal" onclick="closeEmergencyModal(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title">
+        <span class="material-symbols-outlined">warning</span>
+        PWSA USA Medical Alert Protocol
+      </div>
+      <button class="modal-close" onclick="closeEmergencyModal()">&times;</button>
+    </div>
+    <div style="font-size:0.9rem; line-height:1.6; color:#f8fafc;">
+      <p style="color:#fca5a5; font-weight:600;">🚨 Critical Anesthesia & Emergency Precautions for PWS Patients:</p>
+      <ul>
+        <li><strong>High Pain Threshold:</strong> Patients may NOT report pain standardly. Tachycardia or behavioral changes may be sole indicators of severe illness or internal injury.</li>
+        <li><strong>Gastroparesis & Gastric Distension:</strong> Severe risk of delayed gastric emptying. Watch for sudden abdominal swelling or vomiting.</li>
+        <li><strong>Airway Obstruction & Apnea:</strong> Narrow larynx and hypotonia increase airway collapse risk during sedation. Continuous pulse oximetry required.</li>
+        <li><strong>Temperature Instability:</strong> Unpredictable hypo/hyperthermia due to hypothalamic dysfunction.</li>
+      </ul>
+      <div style="margin-top:1rem; padding:0.8rem; background:#0f172a; border-radius:8px; border:1px solid var(--border);">
+        <strong>🏥 On-Call Endocrinology Emergency:</strong> (555) 019-2831<br>
+        <strong>📄 PWSA USA Medical Alert Pocket Card:</strong> Available in Cloud Storage
+      </div>
+      <button type="button" class="emergency-btn" style="margin-top:1rem; width:100%; justify-content:center;" onclick="closeEmergencyModal(); sendQuick('What are the official PWS guidelines for anesthesia precautions?');">
+        Ask Agent Full Clinical Details
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+const log = document.getElementById("log");
+const form = document.getElementById("form");
+const input = document.getElementById("input");
+let currentRole = "Admin";
+
+const roleConfigs = {
+  Admin: {
+    title: "Active Role: Admin (Parent)",
+    desc: "Full management privileges active: Add appointments, edit child profile, log medications, invite caregivers, and search grounded PWS medical guidelines.",
+    chips: [
+      { label: '📅 Add Dr. XYZ Appointment', prompt: 'Add an appointment for Dr. XYZ for my son at 9am on 30th August at City Childrens Hospital' },
+      { label: '❓ PWS Medical Guidelines', prompt: 'What are the official PWS guidelines for anesthesia precautions and gastroparesis?' },
+      { label: '💉 Log GH Dose', prompt: 'Log Growth Hormone injection 0.5 mg administered at 8:00 PM tonight by Dad' },
+      { label: '👥 Caregiver Privileges', prompt: 'Show me caregiver privilege tiers and active access permissions' },
+      { label: '📋 Care Profile & Schedule', prompt: 'Show me Leos care profile and upcoming appointments' }
+    ]
+  },
+  Caregiver: {
+    title: "Active Role: Caregiver (Babysitter / Family)",
+    desc: "Caregiver privileges active: Log daily meals & calorie intake, log medication doses, view daily routine schedule, and view emergency protocols.",
+    chips: [
+      { label: '🥗 Log Meal (250 kcal)', prompt: 'Log breakfast meal for Leo: 250 kcal consisting of oatmeal and scrambled egg whites' },
+      { label: '💉 Log GH Injection', prompt: 'Log Growth Hormone injection 0.5 mg administered at 8:00 PM by Babysitter' },
+      { label: '🚨 PWS Emergency Guidelines', prompt: 'What are the PWSA USA emergency guidelines for stomach pain or high temperature?' },
+      { label: '📋 View Todays Schedule', prompt: 'Show me Leos daily routine schedule and upcoming appointments for today' }
+    ]
+  },
+  Specialist: {
+    title: "Active Role: Specialist (Therapist / Dietitian)",
+    desc: "Specialist privileges active: Log PT/OT/Speech session progress, log dietary evaluations, view care profile, and search medical guidelines.",
+    chips: [
+      { label: '🏃 Log Physical Therapy (30 min)', prompt: 'Log Physical Therapy session: 30 minutes of trunk stabilization and core balance games. Achieved standing balance milestone.' },
+      { label: '🗣️ Log Speech & Feeding Progress', prompt: 'Log Speech & Feeding Therapy session: 25 minutes of oral motor stimulation.' },
+      { label: '🥗 Log Dietary Evaluation', prompt: 'Log Dietitian session: Reviewed 1200 kcal macro balance for Stage 1b toddler.' },
+      { label: '🩺 Clinical & Anesthesia Alert', prompt: 'What are the official PWS medical guidelines for anesthesia and surgical recovery?' }
+    ]
+  }
+};
+
+function switchRole(role) {
+  currentRole = role;
+  const config = roleConfigs[role] || roleConfigs.Admin;
+  
+  // Update Welcome Banner
+  document.getElementById("welcomeTitle").innerHTML = `<span class="material-symbols-outlined">shield_person</span> ${config.title}`;
+  document.getElementById("welcomeDesc").textContent = config.desc;
+
+  // Update Quick Action Chips
+  const container = document.getElementById("quickBar");
+  container.innerHTML = "";
+  config.chips.forEach(c => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "chip";
+    btn.onclick = () => sendQuick(c.prompt);
+    btn.innerHTML = `<span class="material-symbols-outlined" style="font-size:1rem;">touch_app</span> ${c.label}`;
+    container.appendChild(btn);
+  });
+}
+
+// Initialize default role on load
+switchRole("Admin");
+
+function sendQuick(txt) {
+  input.value = txt;
+  form.dispatchEvent(new Event("submit"));
+}
+
+async function resetChatSession() {
+  try {
+    await fetch("/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: "Hello", role: currentRole, reset: true })
+    });
+  } catch (e) {}
+  log.innerHTML = `
+    <div class="welcome-card">
+      <div class="welcome-title">
+        <span class="material-symbols-outlined">smart_toy</span>
+        Session Refreshed!
+      </div>
+      <div class="welcome-desc">
+        Chat context refreshed for ${currentRole} role. How can I help you and Leo today?
+      </div>
+    </div>`;
+}
+
+function openEmergencyModal() {
+  document.getElementById("alertModal").style.display = "flex";
+}
+function closeEmergencyModal() {
+  document.getElementById("alertModal").style.display = "none";
+}
+
+function el(tag, cls, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text != null) e.textContent = text;
+  return e;
+}
+
+function bubble(who) {
+  const m = el("div", "msg " + who);
+  const b = el("div", "bubble");
+  m.appendChild(b);
+  log.appendChild(m);
+  log.scrollTop = log.scrollHeight;
+  return b;
+}
+
+/* --- A2UI Component Mini-Renderer --- */
+function boundStr(v) {
+  if (v == null) return "";
+  if (typeof v === "string") return v;
+  if (typeof v.literalString === "string") return v.literalString;
+  return "";
+}
+
+function childIds(props) {
+  const ids = [];
+  if (props && typeof props.child === "string") ids.push(props.child);
+  const ch = props && props.children;
+  if (ch && Array.isArray(ch.explicitList)) {
+    for (const c of ch.explicitList) if (typeof c === "string") ids.push(c);
+  }
+  return ids;
+}
+
+function iconName(n) {
+  return String(n || "").replace(/([a-z0-9])([A-Z])/g, "$1_$2").replace(/\s+/g, "_").toLowerCase();
+}
+
+function buildNode(id, comps, seen) {
+  if (!id || seen.has(id)) return null;
+  seen.add(id);
+  const spec = comps[id];
+  if (!spec || typeof spec !== "object") return null;
+  const type = Object.keys(spec)[0];
+  const props = spec[type] || {};
+  const kids = () => childIds(props).map(cid => buildNode(cid, comps, seen)).filter(Boolean);
+
+  switch (type) {
+    case "Card": {
+      const d = el("div", "a2card");
+      kids().forEach(n => d.appendChild(n));
+      return d;
+    }
+    case "Column":
+    case "List": {
+      const horizontal = type === "List" && props.direction === "horizontal";
+      const d = el("div", horizontal ? "a2row" : "a2col");
+      kids().forEach(n => d.appendChild(n));
+      return d;
+    }
+    case "Row": {
+      const d = el("div", "a2row" + (props.distribution === "spaceBetween" ? " between" : ""));
+      kids().forEach(n => d.appendChild(n));
+      return d;
+    }
+    case "Text": {
+      const t = el("div", "a2text");
+      const hint = String(props.usageHint || "body").toLowerCase();
+      if (["h1", "h2", "h3", "h4"].includes(hint)) t.classList.add("a2-" + hint);
+      else if (hint === "caption") t.classList.add("a2-caption");
+      t.textContent = boundStr(props.text);
+      return t;
+    }
+    case "Divider":
+      return el("hr", "a2divider");
+    case "Image": {
+      const src = boundStr(props.url || props.src);
+      if (!/^https?:\/\//i.test(src)) return null;
+      const img = el("img", "a2img");
+      img.src = src;
+      img.alt = boundStr(props.alt) || "";
+      return img;
+    }
+    case "Icon": {
+      const s = el("span", "material-symbols-outlined");
+      s.textContent = iconName(boundStr(props.name) || props.name);
+      return s;
+    }
+    default:
+      return null;
+  }
+}
+
+function renderSurface(messages, container) {
+  const comps = {};
+  const roots = [];
+  for (const m of messages) {
+    if (m.beginRendering && typeof m.beginRendering.root === "string") roots.push(m.beginRendering.root);
+    const su = m.surfaceUpdate;
+    if (su && Array.isArray(su.components)) {
+      for (const c of su.components) if (c && c.id && c.component) comps[c.id] = c.component;
+    }
+  }
+  let rootIds = roots.filter(r => comps[r]);
+  if (rootIds.length === 0) {
+    const referenced = new Set();
+    for (const id in comps) {
+      const spec = comps[id];
+      childIds(spec[Object.keys(spec)[0]] || {}).forEach(c => referenced.add(c));
+    }
+    rootIds = Object.keys(comps).filter(id => !referenced.has(id));
+  }
+  let drew = false;
+  for (const rid of rootIds) {
+    const node = buildNode(rid, comps, new Set());
+    if (node) { container.appendChild(node); drew = true; }
+  }
+  return drew;
+}
+
+function flattenText(messages) {
+  const out = [];
+  for (const m of messages) {
+    const su = m.surfaceUpdate;
+    if (su && Array.isArray(su.components)) {
+      for (const c of su.components) {
+        if (c && c.component && c.component.Text) out.push(boundStr(c.component.Text.text));
+      }
+    }
+  }
+  return out.join("\n").trim();
+}
+
+function renderReply(b, parts) {
+  b.textContent = "";
+  const texts = parts.filter(p => p && (p.kind === "text" || (!p.kind && p.text))).map(p => p.text || "");
+  const a2ui = parts.filter(p => p && p.kind === "a2ui" && p.data).map(p => p.data);
+
+  const textStr = texts.join("\n").trim();
+  if (textStr) b.appendChild(el("div", null, textStr));
+
+  if (a2ui.length) {
+    b.classList.add("rich");
+    if (!renderSurface(a2ui, b)) b.appendChild(el("div", null, flattenText(a2ui) || "(no card content)"));
+  }
+  if (!b.childNodes.length) b.textContent = "(no response)";
+  log.scrollTop = log.scrollHeight;
+}
+
+form.addEventListener("submit", async (ev) => {
+  ev.preventDefault();
+  const text = input.value.trim();
+  if (!text) return;
+  bubble("user").textContent = text;
+  input.value = "";
+  const b = bubble("agent");
+  b.textContent = "…";
+  try {
+    const res = await fetch("/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: text, role: currentRole })
+    });
+    const raw = await res.text();
+    let data;
+    try { data = JSON.parse(raw); }
+    catch { throw new Error(`Server returned non-JSON (HTTP ${res.status}). ${raw.slice(0, 300)}`); }
+    renderReply(b, data.parts || []);
+  } catch (e) {
+    b.textContent = "Error: " + e.message;
+  }
+});
+</script>
+</body>
+</html>
