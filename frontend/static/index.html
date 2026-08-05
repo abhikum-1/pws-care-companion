@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PWS Care Companion - Role Privilege Matrix UI</title>
+<title>PWS Care Companion - Login & Invite System</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Material+Symbols+Outlined">
 <style>
   :root {
@@ -82,6 +82,26 @@
   }
   .role-selector:focus {
     box-shadow: 0 0 0 2px rgba(45, 212, 191, 0.3);
+  }
+
+  .header-btn {
+    background: #334155;
+    border: 1px solid #475569;
+    color: #f8fafc;
+    padding: 0.5rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s ease;
+  }
+  .header-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent-light);
+    color: #fff;
   }
 
   .emergency-btn {
@@ -289,133 +309,81 @@
   }
 
   /* Calorie Ring Widget */
-  .calorie-container {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
+  .calorie-container { display: flex; align-items: center; gap: 1rem; }
   .calorie-ring {
-    width: 76px;
-    height: 76px;
-    border-radius: 50%;
+    width: 76px; height: 76px; border-radius: 50%;
     background: conic-gradient(var(--accent) 50%, #334155 0);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+    display: flex; align-items: center; justify-content: center; position: relative;
   }
   .calorie-ring-inner {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
+    width: 60px; height: 60px; border-radius: 50%;
     background: var(--card-bg);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.8rem;
-    font-weight: 700;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-size: 0.8rem; font-weight: 700;
   }
-  .calorie-stats {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    font-size: 0.85rem;
-  }
+  .calorie-stats { flex: 1; display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.85rem; }
   .stat-row { display: flex; justify-content: space-between; color: var(--text-secondary); }
   .stat-val { font-weight: 600; color: var(--text-primary); }
 
   /* Activity Feed Widget */
   .feed-list { display: flex; flex-direction: column; gap: 0.65rem; }
   .feed-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.6rem;
-    font-size: 0.85rem;
-    line-height: 1.4;
-    padding: 0.4rem 0;
+    display: flex; align-items: flex-start; gap: 0.6rem;
+    font-size: 0.85rem; line-height: 1.4; padding: 0.4rem 0;
     border-bottom: 1px solid rgba(255,255,255,0.05);
   }
   .feed-item:last-child { border-bottom: none; }
   .feed-avatar {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: var(--accent);
-    color: #fff;
-    font-size: 0.75rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--accent); color: #fff;
+    font-size: 0.75rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
   }
 
   /* Appointments Widget */
   .appt-item {
-    background: #0f172a;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 0.75rem;
-    margin-bottom: 0.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
+    background: #0f172a; border: 1px solid var(--border);
+    border-radius: 10px; padding: 0.75rem; margin-bottom: 0.5rem;
+    display: flex; flex-direction: column; gap: 0.3rem;
   }
   .appt-header { display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 0.88rem; color: #f8fafc; }
   .appt-time { font-size: 0.8rem; color: var(--accent-light); display: flex; align-items: center; gap: 0.3rem; }
 
-  /* A2UI Component Renderer Styles */
-  .a2card {
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 1.2rem;
-    background: var(--card-bg);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.25);
-    max-width: 100%;
-  }
-  .a2card + .a2card, .a2col > .a2card { margin-top: 0.8rem; }
-  .a2col { display: flex; flex-direction: column; gap: 0.6rem; }
-  .a2row { display: flex; flex-direction: row; gap: 0.8rem; align-items: center; flex-wrap: wrap; }
-  .a2row.between { justify-content: space-between; }
-  .a2text { margin: 0; line-height: 1.5; color: var(--text-primary); }
-  .a2text.a2-h1 { font-size: 1.5rem; font-weight: 700; color: var(--accent-light); }
-  .a2text.a2-h2 { font-size: 1.25rem; font-weight: 700; color: var(--accent-light); }
-  .a2text.a2-h3 { font-size: 1.1rem; font-weight: 600; color: #cbd5e1; }
-  .a2text.a2-caption { font-size: 0.85rem; color: var(--text-secondary); }
-  .a2divider { border: none; border-top: 1px solid var(--border); margin: 0.5rem 0; width: 100%; }
-  .a2img { max-width: 100%; border-radius: 10px; display: block; }
-  .material-symbols-outlined { font-family: 'Material Symbols Outlined'; font-size: 1.25rem; line-height: 1; vertical-align: middle; color: var(--accent-light); }
-
-  /* Modal Sheet */
+  /* Modals */
   .modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.7);
-    backdrop-filter: blur(4px);
-    z-index: 100;
-    align-items: center;
-    justify-content: center;
+    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); z-index: 100;
+    align-items: center; justify-content: center;
   }
   .modal-box {
-    background: #1e293b;
-    border: 2px solid var(--alert-red);
-    border-radius: 16px;
-    width: 90%;
-    max-width: 600px;
-    padding: 1.5rem;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    max-height: 85vh;
-    overflow-y: auto;
+    background: #1e293b; border: 1px solid var(--border);
+    border-radius: 16px; width: 90%; max-width: 520px; padding: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); max-height: 85vh; overflow-y: auto;
   }
   .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 0.8rem; margin-bottom: 1rem; }
-  .modal-title { font-size: 1.2rem; font-weight: 700; color: #fca5a5; display: flex; align-items: center; gap: 0.5rem; }
+  .modal-title { font-size: 1.15rem; font-weight: 700; color: var(--accent-light); display: flex; align-items: center; gap: 0.5rem; }
   .modal-close { background: transparent; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer; }
 
-  @media (max-width: 900px) {
-    .dashboard-panel { display: none; }
+  .share-btn {
+    padding: 0.75rem 1rem; border: none; border-radius: 10px;
+    font-size: 0.9rem; font-weight: 600; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; transition: all 0.2s;
   }
+  .share-btn.whatsapp { background: #25D366; color: #fff; }
+  .share-btn.whatsapp:hover { background: #1da851; }
+  .share-btn.sms { background: #0284c7; color: #fff; }
+  .share-btn.sms:hover { background: #0369a1; }
+  .share-btn.copy { background: #334155; color: #fff; border: 1px solid var(--border); }
+  .share-btn.copy:hover { background: #475569; }
+
+  .profile-btn {
+    background: #0f172a; border: 1px solid var(--border); border-radius: 10px;
+    padding: 0.8rem 1rem; color: #fff; display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; transition: all 0.2s; margin-bottom: 0.6rem;
+  }
+  .profile-btn:hover { border-color: var(--accent-light); background: #1e293b; }
+
+  @media (max-width: 900px) { .dashboard-panel { display: none; } }
 </style>
 </head>
 <body>
@@ -429,19 +397,29 @@
     </div>
   </div>
   <div style="display:flex; gap:0.6rem; align-items:center;">
+    <!-- Active User & Login Button -->
+    <button type="button" class="header-btn" onclick="openLoginModal()">
+      <span class="material-symbols-outlined" style="color:var(--accent-light);">account_circle</span>
+      <span id="currentUserLabel">Sign In / Switch User</span>
+    </button>
     <!-- Role Selector Dropdown -->
     <select id="roleSelect" class="role-selector" onchange="switchRole(this.value)">
       <option value="Admin">👑 Admin (Parent)</option>
-      <option value="Caregiver">🤲 Caregiver (Babysitter / Family)</option>
-      <option value="Specialist">🩺 Specialist (PT / OT / Dietitian)</option>
+      <option value="Caregiver">🤲 Caregiver (Babysitter)</option>
+      <option value="Specialist">🩺 Specialist (PT/OT/Dietitian)</option>
     </select>
-    <button type="button" class="emergency-btn" style="background:#334155; border-color:#475569; color:#f8fafc;" onclick="resetChatSession()">
+    <!-- Invite Button -->
+    <button type="button" class="header-btn" style="background:var(--accent); border-color:var(--accent-light);" onclick="openInviteModal()">
+      <span class="material-symbols-outlined">person_add</span>
+      Invite Caregiver
+    </button>
+    <button type="button" class="header-btn" onclick="resetChatSession()">
       <span class="material-symbols-outlined">refresh</span>
-      New Session
+      Reset
     </button>
     <button type="button" class="emergency-btn" onclick="openEmergencyModal()">
       <span class="material-symbols-outlined">warning</span>
-      Medical Alert Protocol
+      Alert Protocol
     </button>
   </div>
 </header>
@@ -550,9 +528,100 @@
   </div>
 </div>
 
+<!-- Login Modal -->
+<div class="modal-overlay" id="loginModal" onclick="closeLoginModal(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title">
+        <span class="material-symbols-outlined">login</span>
+        Caregiver Login & Profile Selector
+      </div>
+      <button class="modal-close" onclick="closeLoginModal()">&times;</button>
+    </div>
+    <div style="font-size:0.9rem; line-height:1.6; color:#f8fafc;">
+      <p style="color:var(--text-secondary); margin-bottom:1rem;">Select a verified profile to sign in and activate corresponding privilege permissions:</p>
+      
+      <div class="profile-btn" onclick="selectUserProfile('John (Father)', 'Admin')">
+        <div>
+          <strong>John (Father)</strong> <br>
+          <span style="font-size:0.8rem; color:var(--accent-light);">Role: Admin (Parent)</span>
+        </div>
+        <span class="material-symbols-outlined">chevron_right</span>
+      </div>
+
+      <div class="profile-btn" onclick="selectUserProfile('Sarah (Mother)', 'Admin')">
+        <div>
+          <strong>Sarah (Mother)</strong> <br>
+          <span style="font-size:0.8rem; color:var(--accent-light);">Role: Admin (Parent)</span>
+        </div>
+        <span class="material-symbols-outlined">chevron_right</span>
+      </div>
+
+      <div class="profile-btn" onclick="selectUserProfile('Emily (Babysitter)', 'Caregiver')">
+        <div>
+          <strong>Emily (Babysitter / Caregiver)</strong> <br>
+          <span style="font-size:0.8rem; color:#38bdf8;">Role: Caregiver</span>
+        </div>
+        <span class="material-symbols-outlined">chevron_right</span>
+      </div>
+
+      <div class="profile-btn" onclick="selectUserProfile('Dr. James (PT Specialist)', 'Specialist')">
+        <div>
+          <strong>Dr. James (Physical Therapist)</strong> <br>
+          <span style="font-size:0.8rem; color:#c084fc;">Role: Specialist (Therapist)</span>
+        </div>
+        <span class="material-symbols-outlined">chevron_right</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Invite Modal -->
+<div class="modal-overlay" id="inviteModal" onclick="closeInviteModal(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title">
+        <span class="material-symbols-outlined">person_add</span>
+        Invite Caregiver or Therapist via Link
+      </div>
+      <button class="modal-close" onclick="closeInviteModal()">&times;</button>
+    </div>
+    <div style="font-size:0.9rem; line-height:1.6; color:#f8fafc; display:flex; flex-direction:column; gap:0.9rem;">
+      <div>
+        <label style="font-size:0.85rem; color:var(--text-secondary); font-weight:600;">Select Role to Invite:</label>
+        <select id="inviteRoleSelect" class="role-selector" style="width:100%; margin-top:0.3rem;" onchange="generateInviteURL()">
+          <option value="Caregiver">🤲 Caregiver (Babysitter / Family)</option>
+          <option value="Specialist">🩺 Specialist (PT / OT / Dietitian)</option>
+          <option value="Admin">👑 Co-Admin (Parent)</option>
+        </select>
+      </div>
+
+      <div>
+        <label style="font-size:0.85rem; color:var(--text-secondary); font-weight:600;">Generated Shareable Link:</label>
+        <input id="inviteUrlInput" readonly style="width:100%; font-size:0.82rem; margin-top:0.3rem; background:#0f172a; color:#2dd4bf; border:1px solid var(--border); padding:0.6rem; border-radius:8px;">
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:0.6rem; margin-top:0.4rem;">
+        <button type="button" class="share-btn whatsapp" onclick="shareWhatsApp()">
+          <span class="material-symbols-outlined">chat</span>
+          Share via WhatsApp
+        </button>
+        <button type="button" class="share-btn sms" onclick="shareSMS()">
+          <span class="material-symbols-outlined">sms</span>
+          Share via SMS / Text
+        </button>
+        <button type="button" class="share-btn copy" onclick="copyInviteLink()">
+          <span class="material-symbols-outlined">content_copy</span>
+          Copy Link to Clipboard
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Medical Alert Protocol Modal -->
 <div class="modal-overlay" id="alertModal" onclick="closeEmergencyModal(event)">
-  <div class="modal-box" onclick="event.stopPropagation()">
+  <div class="modal-box" style="border-color: var(--alert-red);" onclick="event.stopPropagation()">
     <div class="modal-header">
       <div class="modal-title">
         <span class="material-symbols-outlined">warning</span>
@@ -563,10 +632,9 @@
     <div style="font-size:0.9rem; line-height:1.6; color:#f8fafc;">
       <p style="color:#fca5a5; font-weight:600;">🚨 Critical Anesthesia & Emergency Precautions for PWS Patients:</p>
       <ul>
-        <li><strong>High Pain Threshold:</strong> Patients may NOT report pain standardly. Tachycardia or behavioral changes may be sole indicators of severe illness or internal injury.</li>
+        <li><strong>High Pain Threshold:</strong> Patients may NOT report pain standardly. Tachycardia or behavioral changes may be sole indicators of severe illness.</li>
         <li><strong>Gastroparesis & Gastric Distension:</strong> Severe risk of delayed gastric emptying. Watch for sudden abdominal swelling or vomiting.</li>
         <li><strong>Airway Obstruction & Apnea:</strong> Narrow larynx and hypotonia increase airway collapse risk during sedation. Continuous pulse oximetry required.</li>
-        <li><strong>Temperature Instability:</strong> Unpredictable hypo/hyperthermia due to hypothalamic dysfunction.</li>
       </ul>
       <div style="margin-top:1rem; padding:0.8rem; background:#0f172a; border-radius:8px; border:1px solid var(--border);">
         <strong>🏥 On-Call Endocrinology Emergency:</strong> (555) 019-2831<br>
@@ -584,6 +652,7 @@ const log = document.getElementById("log");
 const form = document.getElementById("form");
 const input = document.getElementById("input");
 let currentRole = "Admin";
+let currentUser = "John (Father)";
 
 const roleConfigs = {
   Admin: {
@@ -621,13 +690,12 @@ const roleConfigs = {
 
 function switchRole(role) {
   currentRole = role;
+  document.getElementById("roleSelect").value = role;
   const config = roleConfigs[role] || roleConfigs.Admin;
   
-  // Update Welcome Banner
   document.getElementById("welcomeTitle").innerHTML = `<span class="material-symbols-outlined">shield_person</span> ${config.title}`;
   document.getElementById("welcomeDesc").textContent = config.desc;
 
-  // Update Quick Action Chips
   const container = document.getElementById("quickBar");
   container.innerHTML = "";
   config.chips.forEach(c => {
@@ -640,8 +708,74 @@ function switchRole(role) {
   });
 }
 
-// Initialize default role on load
+function openLoginModal() { document.getElementById("loginModal").style.display = "flex"; }
+function closeLoginModal() { document.getElementById("loginModal").style.display = "none"; }
+
+function selectUserProfile(name, role) {
+  currentUser = name;
+  document.getElementById("currentUserLabel").textContent = name;
+  switchRole(role);
+  closeLoginModal();
+}
+
+function openInviteModal() {
+  document.getElementById("inviteModal").style.display = "flex";
+  generateInviteURL();
+}
+function closeInviteModal() { document.getElementById("inviteModal").style.display = "none"; }
+
+function generateInviteURL() {
+  const role = document.getElementById("inviteRoleSelect").value;
+  const inviteCode = Math.floor(1000 + Math.random() * 9000);
+  const baseUrl = window.location.origin + window.location.pathname;
+  const url = `${baseUrl}?invite=${inviteCode}&role=${role}`;
+  document.getElementById("inviteUrlInput").value = url;
+}
+
+function shareWhatsApp() {
+  const url = document.getElementById("inviteUrlInput").value;
+  const role = document.getElementById("inviteRoleSelect").value;
+  const msg = encodeURIComponent(`Hi! You are invited to join Leo's PWS Care Companion team as a ${role}. Click here to accept: ${url}`);
+  window.open(`https://wa.me/?text=${msg}`, '_blank');
+}
+
+function shareSMS() {
+  const url = document.getElementById("inviteUrlInput").value;
+  const role = document.getElementById("inviteRoleSelect").value;
+  const msg = encodeURIComponent(`You are invited to join Leo's PWS Care Companion team as a ${role}: ${url}`);
+  window.open(`sms:?body=${msg}`, '_blank');
+}
+
+function copyInviteLink() {
+  const input = document.getElementById("inviteUrlInput");
+  navigator.clipboard.writeText(input.value);
+  alert("Caregiver invite link copied to clipboard!");
+}
+
+// Check URL Parameters on Page Load
+function checkUrlParams() {
+  const params = new URLSearchParams(window.location.search);
+  const inviteRole = params.get("role");
+  const inviteCode = params.get("invite");
+  if (inviteRole && inviteConfigs(inviteRole)) {
+    switchRole(inviteRole);
+    log.innerHTML = `
+      <div class="welcome-card" style="border-color:var(--accent-light);">
+        <div class="welcome-title">
+          <span class="material-symbols-outlined" style="color:#2dd4bf;">mark_email_read</span>
+          Invitation Accepted (Code #${inviteCode})
+        </div>
+        <div class="welcome-desc">
+          You have joined Leo's PWS Care Companion team as a <strong>${inviteRole}</strong>.
+        </div>
+      </div>`;
+  }
+}
+function inviteConfigs(role) { return ["Admin", "Caregiver", "Specialist"].includes(role); }
+
+// Initialize default on load
 switchRole("Admin");
+checkUrlParams();
 
 function sendQuick(txt) {
   input.value = txt;
@@ -668,12 +802,8 @@ async function resetChatSession() {
     </div>`;
 }
 
-function openEmergencyModal() {
-  document.getElementById("alertModal").style.display = "flex";
-}
-function closeEmergencyModal() {
-  document.getElementById("alertModal").style.display = "none";
-}
+function openEmergencyModal() { document.getElementById("alertModal").style.display = "flex"; }
+function closeEmergencyModal() { document.getElementById("alertModal").style.display = "none"; }
 
 function el(tag, cls, text) {
   const e = document.createElement(tag);
@@ -748,14 +878,12 @@ function buildNode(id, comps, seen) {
       t.textContent = boundStr(props.text);
       return t;
     }
-    case "Divider":
-      return el("hr", "a2divider");
+    case "Divider": return el("hr", "a2divider");
     case "Image": {
       const src = boundStr(props.url || props.src);
       if (!/^https?:\/\//i.test(src)) return null;
       const img = el("img", "a2img");
-      img.src = src;
-      img.alt = boundStr(props.alt) || "";
+      img.src = src; img.alt = boundStr(props.alt) || "";
       return img;
     }
     case "Icon": {
@@ -763,8 +891,7 @@ function buildNode(id, comps, seen) {
       s.textContent = iconName(boundStr(props.name) || props.name);
       return s;
     }
-    default:
-      return null;
+    default: return null;
   }
 }
 
@@ -836,7 +963,7 @@ form.addEventListener("submit", async (ev) => {
     const res = await fetch("/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: text, role: currentRole })
+      body: JSON.stringify({ message: text, role: currentRole, user_name: currentUser })
     });
     const raw = await res.text();
     let data;
