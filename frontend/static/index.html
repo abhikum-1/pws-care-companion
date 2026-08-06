@@ -600,37 +600,61 @@
     <div class="modal-header">
       <div class="modal-title">
         <span class="material-symbols-outlined">person_add</span>
-        Invite Caregiver or Therapist via Link
+        Share App & Generate Credentials
       </div>
-      <button class="modal-close" onclick="closeInviteModal()">&times;</button>
+      <button type="button" class="modal-close" onclick="closeInviteModal()">&times;</button>
     </div>
     <div style="font-size:0.9rem; line-height:1.6; color:#f8fafc; display:flex; flex-direction:column; gap:0.9rem;">
+      <p style="color:var(--text-secondary); margin:0;">Admin App Sharing: Enter caregiver details to automatically generate their Username, Password, and Role credentials.</p>
+      
       <div>
-        <label style="font-size:0.85rem; color:var(--text-secondary); font-weight:600;">Select Role to Invite:</label>
-        <select id="inviteRoleSelect" class="role-selector" style="width:100%; margin-top:0.3rem;" onchange="generateInviteURL()">
+        <label style="font-size:0.82rem; color:var(--text-secondary); font-weight:600;">Caregiver / Specialist Name:</label>
+        <input id="inviteNameInput" type="text" placeholder="e.g. Alex Miller" value="Alex Miller" style="width:100%; margin-top:0.2rem; padding:0.6rem; font-size:0.88rem; background:#0f172a; border:1px solid var(--border); border-radius:8px; color:#fff;" oninput="generateInviteCredentials()">
+      </div>
+
+      <div>
+        <label style="font-size:0.82rem; color:var(--text-secondary); font-weight:600;">Assigned Privilege Role:</label>
+        <select id="inviteRoleSelect" class="role-selector" style="width:100%; margin-top:0.2rem; padding:0.6rem; font-size:0.88rem;" onchange="generateInviteCredentials()">
           <option value="Caregiver">🤲 Caregiver (Babysitter / Family)</option>
           <option value="Specialist">🩺 Specialist (PT / OT / Dietitian)</option>
           <option value="Admin">👑 Co-Admin (Parent)</option>
         </select>
       </div>
 
-      <div>
-        <label style="font-size:0.85rem; color:var(--text-secondary); font-weight:600;">Generated Shareable Link:</label>
-        <input id="inviteUrlInput" readonly style="width:100%; font-size:0.82rem; margin-top:0.3rem; background:#0f172a; color:#2dd4bf; border:1px solid var(--border); padding:0.6rem; border-radius:8px;">
+      <!-- Generated Credentials Preview Box -->
+      <div style="background:#0f172a; padding:0.9rem; border-radius:10px; border:1px solid var(--accent); display:flex; flex-direction:column; gap:0.5rem;">
+        <div style="font-size:0.82rem; font-weight:700; color:var(--accent-light); display:flex; align-items:center; gap:0.3rem;">
+          <span class="material-symbols-outlined" style="font-size:1rem;">verified_user</span>
+          Auto-Generated Credentials Preview:
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.5rem; font-size:0.82rem;">
+          <div>
+            <span style="color:var(--text-secondary);">Username:</span><br>
+            <input id="genUsername" readonly style="width:100%; font-size:0.8rem; background:#1e293b; color:#2dd4bf; border:1px solid var(--border); padding:0.35rem 0.5rem; border-radius:6px;">
+          </div>
+          <div>
+            <span style="color:var(--text-secondary);">Password:</span><br>
+            <input id="genPassword" readonly style="width:100%; font-size:0.8rem; background:#1e293b; color:#2dd4bf; border:1px solid var(--border); padding:0.35rem 0.5rem; border-radius:6px;">
+          </div>
+        </div>
+        <div>
+          <span style="color:var(--text-secondary); font-size:0.82rem;">Full Share Link:</span>
+          <input id="inviteUrlInput" readonly style="width:100%; font-size:0.78rem; margin-top:0.2rem; background:#1e293b; color:#2dd4bf; border:1px solid var(--border); padding:0.4rem 0.6rem; border-radius:6px;">
+        </div>
       </div>
 
-      <div style="display:flex; flex-direction:column; gap:0.6rem; margin-top:0.4rem;">
+      <div style="display:flex; flex-direction:column; gap:0.6rem; margin-top:0.2rem;">
         <button type="button" class="share-btn whatsapp" onclick="shareWhatsApp()">
           <span class="material-symbols-outlined">chat</span>
-          Share via WhatsApp
+          Send Credentials & Link via WhatsApp
         </button>
         <button type="button" class="share-btn sms" onclick="shareSMS()">
           <span class="material-symbols-outlined">sms</span>
-          Share via SMS / Text
+          Send Credentials & Link via SMS
         </button>
         <button type="button" class="share-btn copy" onclick="copyInviteLink()">
           <span class="material-symbols-outlined">content_copy</span>
-          Copy Link to Clipboard
+          Copy Credentials & Link to Clipboard
         </button>
       </div>
     </div>
@@ -812,9 +836,11 @@ function restoreStoredSession() {
   }
 }
 
+let currentGeneratedInvite = {};
+
 function openInviteModal() {
   document.getElementById("inviteModal").style.display = "flex";
-  generateInviteURL();
+  generateInviteCredentials();
 }
 function closeInviteModal(e) {
   if (!e || e.target === document.getElementById("inviteModal") || e.type === "click") {
@@ -822,41 +848,63 @@ function closeInviteModal(e) {
   }
 }
 
-function generateInviteURL() {
+function generateInviteCredentials() {
+  const nameInput = document.getElementById("inviteNameInput").value.trim() || "Caregiver";
   const role = document.getElementById("inviteRoleSelect").value;
-  const inviteCode = Math.floor(1000 + Math.random() * 9000);
+  const cleanName = nameInput.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const code = Math.floor(1000 + Math.random() * 9000);
+  
+  const genUser = `${cleanName}.${role.toLowerCase()}`;
+  const genPass = `PWS-${code}`;
+  
+  document.getElementById("genUsername").value = genUser;
+  document.getElementById("genPassword").value = genPass;
+  
   const baseUrl = window.location.origin + window.location.pathname;
-  const url = `${baseUrl}?invite=${inviteCode}&role=${role}`;
+  const url = `${baseUrl}?invite=${code}&user=${encodeURIComponent(genUser)}&pass=${encodeURIComponent(genPass)}&role=${role}&name=${encodeURIComponent(nameInput)}`;
   document.getElementById("inviteUrlInput").value = url;
+
+  // Save generated credentials in adminUsersDB & localStorage
+  adminUsersDB[genUser] = { name: `${nameInput} (${role})`, role: role, email: `${genUser}@pws.org`, pass: genPass };
+  
+  currentGeneratedInvite = { name: nameInput, username: genUser, password: genPass, role: role, url: url };
 }
 
 function shareWhatsApp() {
-  const url = document.getElementById("inviteUrlInput").value;
-  const role = document.getElementById("inviteRoleSelect").value;
-  const msg = encodeURIComponent(`Hi! You are invited to join Leo's PWS Care Companion team as a ${role}. Click here to accept: ${url}`);
+  const { name, username, password, role, url } = currentGeneratedInvite;
+  const msg = encodeURIComponent(`Hi ${name}! You are invited to join Leo's PWS Care Companion team as a ${role}.\n\n🔗 App Link: ${url}\n👤 Username: ${username}\n🔑 Password: ${password}\n🎭 Role: ${role}`);
   window.open(`https://wa.me/?text=${msg}`, '_blank');
 }
 
 function shareSMS() {
-  const url = document.getElementById("inviteUrlInput").value;
-  const role = document.getElementById("inviteRoleSelect").value;
-  const msg = encodeURIComponent(`You are invited to join Leo's PWS Care Companion team as a ${role}: ${url}`);
+  const { name, username, password, role, url } = currentGeneratedInvite;
+  const msg = encodeURIComponent(`You are invited to join Leo's PWS Care Companion team as a ${role}.\nLink: ${url}\nUsername: ${username}\nPassword: ${password}`);
   window.open(`sms:?body=${msg}`, '_blank');
 }
 
 function copyInviteLink() {
-  const input = document.getElementById("inviteUrlInput");
-  navigator.clipboard.writeText(input.value);
-  alert("Caregiver invite link copied to clipboard!");
+  const { username, password, role, url } = currentGeneratedInvite;
+  const text = `App Link: ${url}\nUsername: ${username}\nPassword: ${password}\nRole: ${role}`;
+  navigator.clipboard.writeText(text);
+  alert("Generated Credentials & Invite Link copied to clipboard!");
 }
 
 // Check URL Parameters or Local Storage on Page Load
 function checkUrlParams() {
   const params = new URLSearchParams(window.location.search);
+  const inviteUser = params.get("user");
+  const invitePass = params.get("pass");
   const inviteRole = params.get("role");
+  const inviteName = params.get("name") || "Caregiver";
   const inviteCode = params.get("invite");
-  if (inviteRole && inviteConfigs(inviteRole)) {
-    switchRole(inviteRole);
+
+  if (inviteUser && invitePass && inviteRole) {
+    // Register credential dynamically
+    adminUsersDB[inviteUser] = { name: `${inviteName} (${inviteRole})`, role: inviteRole, email: `${inviteUser}@pws.org`, pass: invitePass };
+    
+    // Auto-login invited user
+    selectUserProfile(`${inviteName} (${inviteRole})`, inviteRole);
+    
     log.innerHTML = `
       <div class="welcome-card" style="border-color:var(--accent-light);">
         <div class="welcome-title">
@@ -864,7 +912,8 @@ function checkUrlParams() {
           Invitation Accepted (Code #${inviteCode})
         </div>
         <div class="welcome-desc">
-          You have joined Leo's PWS Care Companion team as a <strong>${inviteRole}</strong>.
+          Welcome <strong>${inviteName}</strong>! Your care account has been created.<br>
+          Username: <code>${inviteUser}</code> | Password: <code>${invitePass}</code> | Role: <strong>${inviteRole}</strong>.
         </div>
       </div>`;
   } else {
