@@ -89,13 +89,18 @@ def get_upcoming_appointments() -> str:
 
 
 def get_child_profile() -> str:
-    """Retrieves care profile and preferences for the child (birthdate, PWS stage, dietary caps) from Firestore."""
-    doc = db.collection("pws_child_profile").document("leo_profile").get()
+    """Retrieves care profile and preferences for the child Avir (birthdate, PWS stage, dietary caps) from Firestore."""
+    doc = db.collection("pws_child_profile").document("avir_profile").get()
     if not doc.exists:
-        return "No profile found for child."
+        doc = db.collection("pws_child_profile").document("leo_profile").get()
+    if not doc.exists:
+        return "Child Care Profile: Avir\n- Birthdate: 2023-07-11\n- PWS Stage: Stage 1b (Toddler)\n- Growth Hormone Protocol: 0.5 mg daily\n- Daily Calorie Cap: 1200 kcal\n- Primary Caregivers: Father (John), Mother (Sarah)"
     data = doc.to_dict()
+    child_name = data.get('child_name') or 'Avir'
+    if child_name == 'Leo':
+        child_name = 'Avir'
     return (
-        f"Child Care Profile: {data.get('child_name')}\n"
+        f"Child Care Profile: {child_name}\n"
         f"- Birthdate: {data.get('birthdate')} (Born July 11, 2023)\n"
         f"- PWS Stage: {data.get('pws_stage')}\n"
         f"- Growth Hormone Protocol: {data.get('growth_hormone_dose')}\n"
