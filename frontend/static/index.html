@@ -534,12 +534,36 @@
     <div class="modal-header">
       <div class="modal-title">
         <span class="material-symbols-outlined">login</span>
-        Caregiver Login & Profile Selector
+        Caregiver Sign In & Profile Switcher
       </div>
-      <button class="modal-close" onclick="closeLoginModal()">&times;</button>
+      <button type="button" class="modal-close" onclick="closeLoginModal()">&times;</button>
     </div>
     <div style="font-size:0.9rem; line-height:1.6; color:#f8fafc;">
-      <p style="color:var(--text-secondary); margin-bottom:1rem;">Select a verified profile to sign in and activate corresponding privilege permissions:</p>
+      <!-- Email Sign In Form -->
+      <form id="emailLoginForm" onsubmit="handleEmailSignIn(event)" style="display:flex; flex-direction:column; gap:0.8rem; background:#0f172a; padding:1rem; border-radius:12px; border:1px solid var(--border); margin-bottom:1.2rem;">
+        <div style="font-weight:600; color:var(--accent-light); display:flex; align-items:center; gap:0.4rem;">
+          <span class="material-symbols-outlined" style="font-size:1.1rem;">mail</span>
+          Sign In with Email & Passcode
+        </div>
+        <div>
+          <label style="font-size:0.8rem; color:var(--text-secondary);">Caregiver Email:</label>
+          <input id="loginEmail" type="email" placeholder="e.g. father@pws-care.org" required style="width:100%; margin-top:0.2rem; padding:0.6rem; font-size:0.88rem; background:#1e293b; border:1px solid var(--border); border-radius:8px; color:#fff;">
+        </div>
+        <div>
+          <label style="font-size:0.8rem; color:var(--text-secondary);">Select Access Role:</label>
+          <select id="loginRoleSelect" class="role-selector" style="width:100%; margin-top:0.2rem; padding:0.6rem; font-size:0.88rem;">
+            <option value="Admin">👑 Admin (Parent)</option>
+            <option value="Caregiver">🤲 Caregiver (Babysitter / Family)</option>
+            <option value="Specialist">🩺 Specialist (Therapist / Dietitian)</option>
+          </select>
+        </div>
+        <button type="submit" class="send-btn" style="justify-content:center; padding:0.7rem; margin-top:0.3rem;">
+          <span class="material-symbols-outlined">login</span>
+          Sign In Now
+        </button>
+      </form>
+
+      <p style="color:var(--text-secondary); margin-bottom:0.8rem; font-weight:600;">Or Quick-Select Pre-Verified Profile:</p>
       
       <div class="profile-btn" onclick="selectUserProfile('John (Father)', 'Admin')">
         <div>
@@ -708,21 +732,69 @@ function switchRole(role) {
   });
 }
 
-function openLoginModal() { document.getElementById("loginModal").style.display = "flex"; }
-function closeLoginModal() { document.getElementById("loginModal").style.display = "none"; }
+function openLoginModal() {
+  document.getElementById("loginModal").style.display = "flex";
+}
+function closeLoginModal(e) {
+  if (!e || e.target === document.getElementById("loginModal") || e.type === "click") {
+    document.getElementById("loginModal").style.display = "none";
+  }
+}
+
+function handleEmailSignIn(ev) {
+  ev.preventDefault();
+  const email = document.getElementById("loginEmail").value.trim();
+  const role = document.getElementById("loginRoleSelect").value;
+  if (!email) return;
+  const username = email.split("@")[0];
+  const formattedName = username.charAt(0).toUpperCase() + username.slice(1);
+  selectUserProfile(`${formattedName} (${role})`, role);
+}
 
 function selectUserProfile(name, role) {
   currentUser = name;
+  currentRole = role;
+  localStorage.setItem("pws_user", name);
+  localStorage.setItem("pws_role", role);
+
   document.getElementById("currentUserLabel").textContent = name;
   switchRole(role);
   closeLoginModal();
+
+  // Appends glowing confirmation banner in chat feed
+  const b = bubble("agent");
+  b.innerHTML = `
+    <div style="color:var(--accent-light); font-weight:600; display:flex; align-items:center; gap:0.4rem;">
+      <span class="material-symbols-outlined" style="color:#2dd4bf;">check_circle</span>
+      Successfully signed in as <strong>${name}</strong>
+    </div>
+    <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.3rem;">
+      Active Role: <strong>${role}</strong>. Your session context is now verified and active.
+    </div>`;
+}
+
+function restoreStoredSession() {
+  const savedUser = localStorage.getItem("pws_user");
+  const savedRole = localStorage.getItem("pws_role");
+  if (savedUser && savedRole) {
+    currentUser = savedUser;
+    currentRole = savedRole;
+    document.getElementById("currentUserLabel").textContent = savedUser;
+    switchRole(savedRole);
+  } else {
+    switchRole("Admin");
+  }
 }
 
 function openInviteModal() {
   document.getElementById("inviteModal").style.display = "flex";
   generateInviteURL();
 }
-function closeInviteModal() { document.getElementById("inviteModal").style.display = "none"; }
+function closeInviteModal(e) {
+  if (!e || e.target === document.getElementById("inviteModal") || e.type === "click") {
+    document.getElementById("inviteModal").style.display = "none";
+  }
+}
 
 function generateInviteURL() {
   const role = document.getElementById("inviteRoleSelect").value;
@@ -752,7 +824,7 @@ function copyInviteLink() {
   alert("Caregiver invite link copied to clipboard!");
 }
 
-// Check URL Parameters on Page Load
+// Check URL Parameters or Local Storage on Page Load
 function checkUrlParams() {
   const params = new URLSearchParams(window.location.search);
   const inviteRole = params.get("role");
@@ -769,12 +841,13 @@ function checkUrlParams() {
           You have joined Leo's PWS Care Companion team as a <strong>${inviteRole}</strong>.
         </div>
       </div>`;
+  } else {
+    restoreStoredSession();
   }
 }
 function inviteConfigs(role) { return ["Admin", "Caregiver", "Specialist"].includes(role); }
 
 // Initialize default on load
-switchRole("Admin");
 checkUrlParams();
 
 function sendQuick(txt) {
