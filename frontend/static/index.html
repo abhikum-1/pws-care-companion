@@ -556,10 +556,11 @@
         <div>
           <label style="font-size:0.82rem; color:var(--text-secondary); font-weight:600;">Select Stated User:</label>
           <select id="userSelectDropdown" class="role-selector" style="width:100%; margin-top:0.3rem; padding:0.6rem; font-size:0.88rem;" onchange="autoFillUsername(this.value)">
-            <option value="john">👑 John (Father - Admin)</option>
-            <option value="sarah">👑 Sarah (Mother - Admin)</option>
-            <option value="emily">🤲 Emily (Babysitter - Caregiver)</option>
-            <option value="james">🩺 Dr. James (PT Specialist)</option>
+            <option value="father">👑 Father (John - Admin)</option>
+            <option value="mother">👑 Mother (Sarah - Admin)</option>
+            <option value="nanny">🤲 Nanny (Emily - Caregiver)</option>
+            <option value="therapist">🏃 Therapist (Dr. James - Physical Therapy)</option>
+            <option value="doctor">🩺 Doctor (Dr. XYZ - Pediatric Endocrinologist)</option>
           </select>
         </div>
 
@@ -745,10 +746,15 @@ function switchRole(role) {
 }
 
 const adminUsersDB = {
-  "john": { name: "John (Father)", role: "Admin", email: "john@pws.org", pass: "admin123" },
-  "sarah": { name: "Sarah (Mother)", role: "Admin", email: "sarah@pws.org", pass: "admin123" },
-  "emily": { name: "Emily (Babysitter)", role: "Caregiver", email: "emily@pws.org", pass: "caregiver123" },
-  "james": { name: "Dr. James (PT)", role: "Specialist", email: "james@pws.org", pass: "therapist123" }
+  "father": { name: "Father (John)", role: "Admin", email: "father@pws.org", pass: "father123" },
+  "mother": { name: "Mother (Sarah)", role: "Admin", email: "mother@pws.org", pass: "mother123" },
+  "nanny": { name: "Nanny (Emily)", role: "Caregiver", email: "nanny@pws.org", pass: "nanny123" },
+  "therapist": { name: "Therapist (Dr. James)", role: "Specialist", email: "therapist@pws.org", pass: "therapist123" },
+  "doctor": { name: "Doctor (Dr. XYZ)", role: "Specialist", email: "doctor@pws.org", pass: "doctor123" },
+  "john": { name: "Father (John)", role: "Admin", email: "father@pws.org", pass: "father123" },
+  "sarah": { name: "Mother (Sarah)", role: "Admin", email: "mother@pws.org", pass: "mother123" },
+  "emily": { name: "Nanny (Emily)", role: "Caregiver", email: "nanny@pws.org", pass: "nanny123" },
+  "james": { name: "Therapist (Dr. James)", role: "Specialist", email: "therapist@pws.org", pass: "therapist123" }
 };
 
 function autoFillUsername(key) {
