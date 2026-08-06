@@ -528,74 +528,68 @@
   </div>
 </div>
 
-<!-- Login Modal -->
+<!-- Login Modal Window -->
 <div class="modal-overlay" id="loginModal" onclick="closeLoginModal(event)">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-header">
       <div class="modal-title">
-        <span class="material-symbols-outlined">login</span>
-        Caregiver Sign In & Profile Switcher
+        <span class="material-symbols-outlined">lock</span>
+        Sign In to PWS Care Companion
       </div>
       <button type="button" class="modal-close" onclick="closeLoginModal()">&times;</button>
     </div>
+    
     <div style="font-size:0.9rem; line-height:1.6; color:#f8fafc;">
-      <!-- Email Sign In Form -->
-      <form id="emailLoginForm" onsubmit="handleEmailSignIn(event)" style="display:flex; flex-direction:column; gap:0.8rem; background:#0f172a; padding:1rem; border-radius:12px; border:1px solid var(--border); margin-bottom:1.2rem;">
-        <div style="font-weight:600; color:var(--accent-light); display:flex; align-items:center; gap:0.4rem;">
-          <span class="material-symbols-outlined" style="font-size:1.1rem;">mail</span>
-          Sign In with Email & Passcode
-        </div>
+      <p style="color:var(--text-secondary); margin-bottom:1rem;">Select a stated user or enter your Username and Password shared by Admin:</p>
+      
+      <!-- Username & Password Login Form -->
+      <form id="loginAuthForm" onsubmit="handleUserSignIn(event)" style="display:flex; flex-direction:column; gap:0.9rem; background:#0f172a; padding:1.2rem; border-radius:12px; border:1px solid var(--border);">
+        
         <div>
-          <label style="font-size:0.8rem; color:var(--text-secondary);">Caregiver Email:</label>
-          <input id="loginEmail" type="email" placeholder="e.g. father@pws-care.org" required style="width:100%; margin-top:0.2rem; padding:0.6rem; font-size:0.88rem; background:#1e293b; border:1px solid var(--border); border-radius:8px; color:#fff;">
-        </div>
-        <div>
-          <label style="font-size:0.8rem; color:var(--text-secondary);">Select Access Role:</label>
-          <select id="loginRoleSelect" class="role-selector" style="width:100%; margin-top:0.2rem; padding:0.6rem; font-size:0.88rem;">
-            <option value="Admin">👑 Admin (Parent)</option>
-            <option value="Caregiver">🤲 Caregiver (Babysitter / Family)</option>
-            <option value="Specialist">🩺 Specialist (Therapist / Dietitian)</option>
+          <label style="font-size:0.82rem; color:var(--text-secondary); font-weight:600;">Select Stated User:</label>
+          <select id="userSelectDropdown" class="role-selector" style="width:100%; margin-top:0.3rem; padding:0.6rem; font-size:0.88rem;" onchange="autoFillUsername(this.value)">
+            <option value="john">👑 John (Father - Admin)</option>
+            <option value="sarah">👑 Sarah (Mother - Admin)</option>
+            <option value="emily">🤲 Emily (Babysitter - Caregiver)</option>
+            <option value="james">🩺 Dr. James (PT Specialist)</option>
           </select>
         </div>
-        <button type="submit" class="send-btn" style="justify-content:center; padding:0.7rem; margin-top:0.3rem;">
+
+        <div>
+          <label style="font-size:0.82rem; color:var(--text-secondary); font-weight:600;">Username / Email:</label>
+          <input id="loginUsername" type="text" value="john@pws.org" placeholder="e.g. john@pws.org" required style="width:100%; margin-top:0.3rem; padding:0.65rem; font-size:0.88rem; background:#1e293b; border:1px solid var(--border); border-radius:8px; color:#fff;">
+        </div>
+
+        <div>
+          <label style="font-size:0.82rem; color:var(--text-secondary); font-weight:600;">Password (shared by Admin):</label>
+          <input id="loginPassword" type="password" placeholder="Enter password..." required style="width:100%; margin-top:0.3rem; padding:0.65rem; font-size:0.88rem; background:#1e293b; border:1px solid var(--border); border-radius:8px; color:#fff;">
+        </div>
+
+        <div id="loginErrorMsg" style="display:none; color:#fca5a5; background:var(--alert-bg); border:1px solid var(--alert-red); padding:0.6rem; border-radius:8px; font-size:0.82rem; align-items:center; gap:0.4rem;">
+          <span class="material-symbols-outlined" style="font-size:1rem;">error</span>
+          <span id="loginErrorText">Incorrect password. Please enter the password shared by Admin.</span>
+        </div>
+
+        <button type="submit" class="send-btn" style="justify-content:center; padding:0.75rem; margin-top:0.2rem; font-size:0.95rem;">
           <span class="material-symbols-outlined">login</span>
-          Sign In Now
+          Sign In
         </button>
       </form>
 
-      <p style="color:var(--text-secondary); margin-bottom:0.8rem; font-weight:600;">Or Quick-Select Pre-Verified Profile:</p>
-      
-      <div class="profile-btn" onclick="selectUserProfile('John (Father)', 'Admin')">
-        <div>
-          <strong>John (Father)</strong> <br>
-          <span style="font-size:0.8rem; color:var(--accent-light);">Role: Admin (Parent)</span>
+      <!-- Admin Passwords Directory Reference -->
+      <div style="margin-top:1.2rem; padding:0.9rem; background:#0f172a; border-radius:10px; border:1px solid var(--border); font-size:0.8rem; color:var(--text-secondary);">
+        <div style="font-weight:600; color:var(--accent-light); margin-bottom:0.4rem; display:flex; align-items:center; gap:0.3rem;">
+          <span class="material-symbols-outlined" style="font-size:1rem;">key</span>
+          Admin Shared User Credentials Directory:
         </div>
-        <span class="material-symbols-outlined">chevron_right</span>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.4rem; line-height:1.4;">
+          <div>👑 <strong>John (Father)</strong>: <code>admin123</code></div>
+          <div>👑 <strong>Sarah (Mother)</strong>: <code>admin123</code></div>
+          <div>🤲 <strong>Emily (Babysitter)</strong>: <code>caregiver123</code></div>
+          <div>🩺 <strong>Dr. James (PT)</strong>: <code>therapist123</code></div>
+        </div>
       </div>
 
-      <div class="profile-btn" onclick="selectUserProfile('Sarah (Mother)', 'Admin')">
-        <div>
-          <strong>Sarah (Mother)</strong> <br>
-          <span style="font-size:0.8rem; color:var(--accent-light);">Role: Admin (Parent)</span>
-        </div>
-        <span class="material-symbols-outlined">chevron_right</span>
-      </div>
-
-      <div class="profile-btn" onclick="selectUserProfile('Emily (Babysitter)', 'Caregiver')">
-        <div>
-          <strong>Emily (Babysitter / Caregiver)</strong> <br>
-          <span style="font-size:0.8rem; color:#38bdf8;">Role: Caregiver</span>
-        </div>
-        <span class="material-symbols-outlined">chevron_right</span>
-      </div>
-
-      <div class="profile-btn" onclick="selectUserProfile('Dr. James (PT Specialist)', 'Specialist')">
-        <div>
-          <strong>Dr. James (Physical Therapist)</strong> <br>
-          <span style="font-size:0.8rem; color:#c084fc;">Role: Specialist (Therapist)</span>
-        </div>
-        <span class="material-symbols-outlined">chevron_right</span>
-      </div>
     </div>
   </div>
 </div>
@@ -732,6 +726,22 @@ function switchRole(role) {
   });
 }
 
+const adminUsersDB = {
+  "john": { name: "John (Father)", role: "Admin", email: "john@pws.org", pass: "admin123" },
+  "sarah": { name: "Sarah (Mother)", role: "Admin", email: "sarah@pws.org", pass: "admin123" },
+  "emily": { name: "Emily (Babysitter)", role: "Caregiver", email: "emily@pws.org", pass: "caregiver123" },
+  "james": { name: "Dr. James (PT)", role: "Specialist", email: "james@pws.org", pass: "therapist123" }
+};
+
+function autoFillUsername(key) {
+  const user = adminUsersDB[key];
+  if (user) {
+    document.getElementById("loginUsername").value = user.email;
+    document.getElementById("loginPassword").value = "";
+    document.getElementById("loginErrorMsg").style.display = "none";
+  }
+}
+
 function openLoginModal() {
   document.getElementById("loginModal").style.display = "flex";
 }
@@ -741,14 +751,30 @@ function closeLoginModal(e) {
   }
 }
 
-function handleEmailSignIn(ev) {
+function handleUserSignIn(ev) {
   ev.preventDefault();
-  const email = document.getElementById("loginEmail").value.trim();
-  const role = document.getElementById("loginRoleSelect").value;
-  if (!email) return;
-  const username = email.split("@")[0];
-  const formattedName = username.charAt(0).toUpperCase() + username.slice(1);
-  selectUserProfile(`${formattedName} (${role})`, role);
+  const inputUser = document.getElementById("loginUsername").value.trim().toLowerCase();
+  const inputPass = document.getElementById("loginPassword").value.trim();
+  const errorBox = document.getElementById("loginErrorMsg");
+  const errorText = document.getElementById("loginErrorText");
+
+  // Find user by key or email match
+  let matchedKey = Object.keys(adminUsersDB).find(k => k === inputUser || adminUsersDB[k].email.toLowerCase() === inputUser);
+  if (!matchedKey) {
+    errorText.textContent = "User not found. Please select a stated user or check email.";
+    errorBox.style.display = "flex";
+    return;
+  }
+
+  const userObj = adminUsersDB[matchedKey];
+  if (inputPass !== userObj.pass) {
+    errorText.textContent = "Invalid password. Please enter the password shared by Admin.";
+    errorBox.style.display = "flex";
+    return;
+  }
+
+  errorBox.style.display = "none";
+  selectUserProfile(userObj.name, userObj.role);
 }
 
 function selectUserProfile(name, role) {
