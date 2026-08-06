@@ -2,143 +2,202 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PWS Care Companion - Login & Invite System</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Material+Symbols+Outlined">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>PWS Care Companion - Modern Glassmorphic Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+
 <style>
   :root {
-    --accent: #0d9488;
-    --accent-light: #2dd4bf;
-    --accent-glow: rgba(45, 212, 191, 0.15);
-    --bg-dark: #0f172a;
-    --card-bg: #1e293b;
-    --card-hover: #334155;
-    --border: #334155;
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --alert-red: #ef4444;
-    --alert-bg: rgba(239, 68, 68, 0.12);
+    --bg-main: #070a13;
+    --bg-surface: rgba(15, 23, 42, 0.7);
+    --bg-card: rgba(30, 41, 59, 0.5);
+    --bg-card-hover: rgba(51, 65, 85, 0.6);
+    --border-glass: rgba(255, 255, 255, 0.08);
+    --border-accent: rgba(6, 182, 212, 0.3);
+    
+    --primary-cyan: #06b6d4;
+    --primary-teal: #14b8a6;
+    --primary-indigo: #6366f1;
+    --primary-purple: #8b5cf6;
+    
+    --gradient-brand: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #6366f1 100%);
+    --gradient-alert: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    --gradient-glow: radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.18), transparent 70%);
+
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+    
+    --shadow-glow: 0 0 25px rgba(6, 182, 212, 0.25);
+    --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
   }
 
-  * { box-sizing: border-box; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
   body {
-    margin: 0;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    background: var(--bg-dark);
-    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background: var(--bg-main);
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(6, 182, 212, 0.12) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+      radial-gradient(at 50% 50%, rgba(15, 23, 42, 0.8) 0px, transparent 100%);
+    color: var(--text-main);
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    height: 100vh;
     overflow: hidden;
+    -webkit-font-smoothing: antialiased;
   }
 
-  /* --- Top Header Bar --- */
+  /* --- Glassmorphic Top Header --- */
   header {
-    background: #1e293b;
-    border-bottom: 1px solid var(--border);
-    padding: 0.8rem 1.5rem;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-glass);
+    padding: 0.75rem 1.5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    z-index: 10;
+    z-index: 20;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   }
-  .header-brand {
+
+  .brand-group {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 1rem;
   }
-  .header-title {
-    font-size: 1.2rem;
+
+  .brand-logo {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: var(--gradient-brand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    box-shadow: var(--shadow-glow);
+    position: relative;
+  }
+
+  .brand-logo::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #10b981;
+    border: 2px solid #0f172a;
+    border-radius: 50%;
+    bottom: -2px;
+    right: -2px;
+  }
+
+  .brand-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.25rem;
     font-weight: 700;
-    color: var(--accent-light);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.02em;
   }
-  .patient-badge {
-    background: var(--accent-glow);
-    border: 1px solid var(--accent);
-    color: var(--accent-light);
-    font-size: 0.8rem;
-    font-weight: 500;
-    padding: 0.25rem 0.65rem;
+
+  .patient-tag {
+    background: rgba(6, 182, 212, 0.1);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    color: var(--primary-cyan);
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.3rem 0.75rem;
     border-radius: 20px;
     display: flex;
     align-items: center;
     gap: 0.4rem;
   }
 
-  .role-selector {
-    background: #0f172a;
-    color: #2dd4bf;
-    border: 1px solid var(--accent);
-    border-radius: 8px;
-    padding: 0.5rem 0.85rem;
-    font-size: 0.88rem;
-    font-weight: 600;
-    cursor: pointer;
-    outline: none;
-  }
-  .role-selector:focus {
-    box-shadow: 0 0 0 2px rgba(45, 212, 191, 0.3);
+  .header-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
   }
 
-  .header-btn {
-    background: #334155;
-    border: 1px solid #475569;
-    color: #f8fafc;
+  .btn-glass {
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid var(--border-glass);
+    color: var(--text-main);
     padding: 0.5rem 0.9rem;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 0.4rem;
-    transition: all 0.2s ease;
-  }
-  .header-btn:hover {
-    background: var(--accent);
-    border-color: var(--accent-light);
-    color: #fff;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(8px);
   }
 
-  .emergency-btn {
-    background: var(--alert-bg);
-    border: 1px solid var(--alert-red);
-    color: #fca5a5;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    font-size: 0.88rem;
+  .btn-glass:hover {
+    background: rgba(51, 65, 85, 0.8);
+    border-color: var(--primary-cyan);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.15);
+  }
+
+  .btn-accent {
+    background: var(--gradient-brand);
+    border: none;
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+  }
+  .btn-accent:hover {
+    box-shadow: 0 6px 20px rgba(6, 182, 212, 0.45);
+    transform: translateY(-1px);
+  }
+
+  .btn-alert {
+    background: var(--gradient-alert);
+    border: none;
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+  }
+  .btn-alert:hover {
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.45);
+  }
+
+  .role-dropdown {
+    background: #0f172a;
+    border: 1px solid var(--border-accent);
+    color: var(--primary-cyan);
+    border-radius: 10px;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    transition: all 0.2s ease;
-  }
-  .emergency-btn:hover {
-    background: var(--alert-red);
-    color: #fff;
-    box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+    outline: none;
   }
 
-  /* --- Main Workspace Layout --- */
-  .app-container {
+  /* --- App Layout --- */
+  .workspace {
     display: flex;
     flex: 1;
     overflow: hidden;
+    position: relative;
   }
 
   /* --- Left: Chat Area --- */
-  .chat-panel {
+  .chat-section {
     flex: 1;
     display: flex;
     flex-direction: column;
-    border-right: 1px solid var(--border);
+    background: transparent;
     position: relative;
-    background: #0b1120;
+    border-right: 1px solid var(--border-glass);
   }
 
   #log {
@@ -147,464 +206,507 @@
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.25rem;
     scroll-behavior: smooth;
   }
 
-  .welcome-card {
-    background: linear-gradient(135deg, rgba(30,41,59,0.8), rgba(15,23,42,0.9));
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 1.25rem;
-    margin-bottom: 0.5rem;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  /* Hero Welcome Card */
+  .welcome-hero {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.6) 100%);
+    border: 1px solid var(--border-accent);
+    border-radius: 20px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    backdrop-filter: blur(12px);
   }
-  .welcome-title {
-    font-size: 1.1rem;
+  .welcome-hero::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.25rem;
     font-weight: 700;
-    color: var(--accent-light);
-    margin-bottom: 0.4rem;
+    color: var(--primary-cyan);
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    margin-bottom: 0.5rem;
   }
-  .welcome-desc {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    line-height: 1.5;
+  .hero-desc {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    line-height: 1.6;
   }
 
-  .msg {
+  /* Chat Bubbles */
+  .msg-row {
     display: flex;
     flex-direction: column;
-    max-width: 85%;
+    max-width: 82%;
+    animation: fadeIn 0.3s ease;
   }
-  .msg.user { align-self: flex-end; }
-  .msg.agent { align-self: flex-start; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-  .bubble {
-    padding: 0.9rem 1.2rem;
-    border-radius: 14px;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    color: var(--text-primary);
-    font-size: 0.96rem;
-    line-height: 1.55;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    white-space: pre-wrap;
+  .msg-row.user { align-self: flex-end; }
+  .msg-row.agent { align-self: flex-start; }
+
+  .msg-author {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-bottom: 0.25rem;
+    margin-left: 0.5rem;
+    font-weight: 600;
   }
-  .msg.user .bubble {
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    border-radius: 14px 14px 2px 14px;
+  .msg-row.user .msg-author { margin-left: 0; margin-right: 0.5rem; text-align: right; }
+
+  .msg-bubble {
+    padding: 1rem 1.25rem;
+    border-radius: 18px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    box-shadow: var(--shadow-card);
   }
-  .msg.agent .bubble { border-radius: 14px 14px 14px 2px; }
-  .bubble.rich {
+  .msg-row.user .msg-bubble {
+    background: var(--gradient-brand);
+    color: #ffffff;
+    border-radius: 18px 18px 4px 18px;
+  }
+  .msg-row.agent .msg-bubble {
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid var(--border-glass);
+    color: var(--text-main);
+    border-radius: 18px 18px 18px 4px;
+    backdrop-filter: blur(10px);
+  }
+  .msg-bubble.rich-container {
     background: transparent;
     border: none;
     padding: 0;
     box-shadow: none;
-    max-width: 100%;
-    white-space: normal;
+    width: 100%;
   }
 
   /* Quick Actions Bar */
-  .quick-bar {
+  .action-chips-bar {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.6rem;
     overflow-x: auto;
-    padding: 0.75rem 1.25rem;
-    background: var(--bg-dark);
-    border-top: 1px solid var(--border);
-    scrollbar-width: thin;
+    padding: 0.85rem 1.5rem;
+    background: rgba(15, 23, 42, 0.6);
+    border-top: 1px solid var(--border-glass);
+    scrollbar-width: none;
   }
-  .chip {
-    background: var(--card-bg);
+  .action-chips-bar::-webkit-scrollbar { display: none; }
+
+  .chip-btn {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid var(--border-glass);
     color: #cbd5e1;
-    border: 1px solid var(--border);
     border-radius: 20px;
-    padding: 0.45rem 0.9rem;
+    padding: 0.5rem 1rem;
     font-size: 0.85rem;
     font-weight: 500;
     white-space: nowrap;
     cursor: pointer;
-    transition: all 0.2s ease;
     display: flex;
     align-items: center;
     gap: 0.4rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  .chip:hover {
-    background: var(--card-hover);
-    color: var(--accent-light);
-    border-color: var(--accent-light);
-    transform: translateY(-1px);
+  .chip-btn:hover {
+    background: rgba(51, 65, 85, 0.8);
+    border-color: var(--primary-cyan);
+    color: var(--primary-cyan);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.2);
   }
 
-  /* Form / Input */
-  form {
+  /* Input Dock */
+  .input-dock {
+    padding: 1rem 1.5rem;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--border-glass);
+  }
+  .input-dock form {
     display: flex;
-    gap: 0.6rem;
-    padding: 1rem 1.25rem;
-    background: #1e293b;
-    border-top: 1px solid var(--border);
+    gap: 0.75rem;
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid var(--border-glass);
+    padding: 0.4rem 0.5rem 0.4rem 1.25rem;
+    border-radius: 16px;
+    transition: all 0.2s ease;
   }
-  input {
+  .input-dock form:focus-within {
+    border-color: var(--primary-cyan);
+    box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2);
+    background: rgba(30, 41, 59, 0.8);
+  }
+  .input-dock input {
     flex: 1;
-    padding: 0.85rem 1.1rem;
-    border: 1px solid var(--border);
-    background: #0f172a;
-    color: #fff;
-    border-radius: 10px;
-    font-size: 0.98rem;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  input:focus {
-    border-color: var(--accent-light);
-    box-shadow: 0 0 0 2px rgba(45, 212, 191, 0.2);
-  }
-  button.send-btn {
-    padding: 0.85rem 1.5rem;
+    background: transparent;
     border: none;
-    border-radius: 10px;
-    background: var(--accent);
     color: #fff;
     font-size: 0.95rem;
+    outline: none;
+    font-family: inherit;
+  }
+  .input-dock button {
+    background: var(--gradient-brand);
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 0.4rem;
-    transition: background 0.2s;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
-  button.send-btn:hover { background: #14b8a6; }
+  .input-dock button:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+  }
 
-  /* --- Right: Live Care Dashboard Panel --- */
-  .dashboard-panel {
+  /* --- Right: Live Dashboard Panel --- */
+  .side-dashboard {
     width: 380px;
-    background: #0f172a;
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(12px);
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    padding: 1.25rem;
+    gap: 1.25rem;
     overflow-y: auto;
   }
 
-  .dash-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 1.1rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  .widget-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-glass);
+    border-radius: 18px;
+    padding: 1.25rem;
+    box-shadow: var(--shadow-card);
+    backdrop-filter: blur(10px);
+    transition: transform 0.2s ease, border-color 0.2s ease;
   }
-  .dash-title {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--accent-light);
-    margin-bottom: 0.8rem;
+  .widget-card:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+
+  .widget-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  .widget-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--primary-cyan);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 
-  /* Calorie Ring Widget */
-  .calorie-container { display: flex; align-items: center; gap: 1rem; }
-  .calorie-ring {
-    width: 76px; height: 76px; border-radius: 50%;
-    background: conic-gradient(var(--accent) 50%, #334155 0);
-    display: flex; align-items: center; justify-content: center; position: relative;
+  /* Circular SVG Meter */
+  .meter-box {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
   }
-  .calorie-ring-inner {
-    width: 60px; height: 60px; border-radius: 50%;
-    background: var(--card-bg);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    font-size: 0.8rem; font-weight: 700;
+  .meter-svg {
+    width: 80px;
+    height: 80px;
+    transform: rotate(-90deg);
   }
-  .calorie-stats { flex: 1; display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.85rem; }
-  .stat-row { display: flex; justify-content: space-between; color: var(--text-secondary); }
-  .stat-val { font-weight: 600; color: var(--text-primary); }
+  .meter-bg { stroke: rgba(255, 255, 255, 0.08); stroke-width: 8; fill: none; }
+  .meter-fill {
+    stroke: url(#cyanGradient);
+    stroke-width: 8;
+    stroke-dasharray: 220;
+    stroke-dashoffset: 110;
+    stroke-linecap: round;
+    fill: none;
+    transition: stroke-dashoffset 1s ease;
+  }
+  .meter-center {
+    position: absolute;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #fff;
+    text-align: center;
+  }
 
-  /* Activity Feed Widget */
-  .feed-list { display: flex; flex-direction: column; gap: 0.65rem; }
-  .feed-item {
-    display: flex; align-items: flex-start; gap: 0.6rem;
-    font-size: 0.85rem; line-height: 1.4; padding: 0.4rem 0;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+  /* Activity Timeline */
+  .feed-timeline { display: flex; flex-direction: column; gap: 0.75rem; }
+  .timeline-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.85rem;
   }
-  .feed-item:last-child { border-bottom: none; }
-  .feed-avatar {
-    width: 28px; height: 28px; border-radius: 50%;
-    background: var(--accent); color: #fff;
-    font-size: 0.75rem; font-weight: 700;
+  .timeline-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .avatar-circle {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--gradient-brand);
+    color: #fff; font-weight: 700; font-size: 0.8rem;
     display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
   }
 
-  /* Appointments Widget */
-  .appt-item {
-    background: #0f172a; border: 1px solid var(--border);
-    border-radius: 10px; padding: 0.75rem; margin-bottom: 0.5rem;
-    display: flex; flex-direction: column; gap: 0.3rem;
+  /* Schedule Cards */
+  .appt-card {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--border-glass);
+    border-radius: 12px;
+    padding: 0.85rem;
+    margin-bottom: 0.6rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
   }
-  .appt-header { display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 0.88rem; color: #f8fafc; }
-  .appt-time { font-size: 0.8rem; color: var(--accent-light); display: flex; align-items: center; gap: 0.3rem; }
+  .appt-card:hover {
+    border-color: var(--primary-cyan);
+    transform: translateX(3px);
+  }
+
+  /* A2UI Component Styles */
+  .a2card {
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid var(--border-accent);
+    border-radius: 16px;
+    padding: 1.25rem;
+    box-shadow: var(--shadow-card);
+    backdrop-filter: blur(12px);
+  }
+  .a2col { display: flex; flex-direction: column; gap: 0.6rem; }
+  .a2row { display: flex; flex-direction: row; gap: 0.8rem; align-items: center; flex-wrap: wrap; }
+  .a2row.between { justify-content: space-between; }
+  .a2text { margin: 0; line-height: 1.5; color: var(--text-main); }
+  .a2text.a2-h1 { font-size: 1.4rem; font-weight: 700; color: var(--primary-cyan); }
+  .a2text.a2-h2 { font-size: 1.2rem; font-weight: 700; color: var(--primary-cyan); }
+  .a2text.a2-caption { font-size: 0.85rem; color: var(--text-muted); }
 
   /* Modals */
   .modal-overlay {
     display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); z-index: 100;
+    background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); z-index: 100;
     align-items: center; justify-content: center;
   }
   .modal-box {
-    background: #1e293b; border: 1px solid var(--border);
-    border-radius: 16px; width: 90%; max-width: 520px; padding: 1.5rem;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5); max-height: 85vh; overflow-y: auto;
+    background: #0f172a; border: 1px solid var(--border-accent);
+    border-radius: 20px; width: 92%; max-width: 520px; padding: 1.75rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7); max-height: 88vh; overflow-y: auto;
   }
-  .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 0.8rem; margin-bottom: 1rem; }
-  .modal-title { font-size: 1.15rem; font-weight: 700; color: var(--accent-light); display: flex; align-items: center; gap: 0.5rem; }
-  .modal-close { background: transparent; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer; }
+  .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-glass); padding-bottom: 1rem; margin-bottom: 1.25rem; }
+  .modal-title { font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--primary-cyan); display: flex; align-items: center; gap: 0.5rem; }
+  .modal-close { background: transparent; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; }
 
   .share-btn {
-    padding: 0.75rem 1rem; border: none; border-radius: 10px;
+    padding: 0.85rem 1rem; border: none; border-radius: 12px;
     font-size: 0.9rem; font-weight: 600; cursor: pointer;
-    display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; transition: transform 0.2s;
   }
   .share-btn.whatsapp { background: #25D366; color: #fff; }
-  .share-btn.whatsapp:hover { background: #1da851; }
   .share-btn.sms { background: #0284c7; color: #fff; }
-  .share-btn.sms:hover { background: #0369a1; }
-  .share-btn.copy { background: #334155; color: #fff; border: 1px solid var(--border); }
-  .share-btn.copy:hover { background: #475569; }
+  .share-btn.copy { background: rgba(51, 65, 85, 0.8); color: #fff; border: 1px solid var(--border-glass); }
 
-  .profile-btn {
-    background: #0f172a; border: 1px solid var(--border); border-radius: 10px;
-    padding: 0.8rem 1rem; color: #fff; display: flex; align-items: center; justify-content: space-between;
-    cursor: pointer; transition: all 0.2s; margin-bottom: 0.6rem;
-  }
-  .profile-btn:hover { border-color: var(--accent-light); background: #1e293b; }
-
-  /* Mobile Responsive Media Queries */
-  @media (max-width: 900px) {
-    .dashboard-panel { display: none; }
-  }
-
+  @media (max-width: 900px) { .side-dashboard { display: none; } }
   @media (max-width: 768px) {
-    header {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 0.6rem;
-      padding: 0.75rem 0.9rem;
-    }
-    .header-brand {
-      justify-content: space-between;
-      width: 100%;
-    }
-    .header-title {
-      font-size: 1.05rem;
-    }
-    .header-controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-    }
-    .role-selector {
-      flex: 1;
-      min-width: 110px;
-      font-size: 0.8rem;
-      padding: 0.4rem 0.6rem;
-    }
-    .header-btn, .emergency-btn {
-      padding: 0.45rem 0.7rem;
-      font-size: 0.8rem;
-    }
-    .quick-bar {
-      padding: 0.6rem 0.8rem;
-      gap: 0.4rem;
-      -webkit-overflow-scrolling: touch;
-    }
-    .chip {
-      padding: 0.4rem 0.75rem;
-      font-size: 0.8rem;
-    }
-    #log {
-      padding: 1rem 0.85rem;
-    }
-    .bubble {
-      font-size: 0.92rem;
-      padding: 0.8rem 1rem;
-    }
-    form {
-      padding: 0.75rem 0.85rem;
-    }
-    input {
-      padding: 0.75rem 0.9rem;
-      font-size: 0.92rem;
-    }
-    button.send-btn {
-      padding: 0.75rem 1.1rem;
-    }
-    .modal-box {
-      width: 95%;
-      padding: 1.1rem;
-      max-height: 90vh;
-    }
+    header { flex-direction: column; align-items: stretch; gap: 0.75rem; }
+    .header-controls { flex-wrap: wrap; justify-content: space-between; }
   }
 </style>
 </head>
 <body>
 
+<svg style="width:0;height:0;position:absolute;">
+  <defs>
+    <linearGradient id="cyanGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4" />
+      <stop offset="100%" stop-color="#3b82f6" />
+    </linearGradient>
+  </defs>
+</svg>
+
 <header>
-  <div class="header-brand">
-    <div class="header-title">🩺 PWS Care Companion</div>
-    <div class="patient-badge">
-      <span class="material-symbols-outlined" style="font-size:1rem;">child_care</span>
-      Leo (Stage 1b Toddler, 13m)
+  <div class="brand-group">
+    <div class="brand-logo">
+      <span class="material-symbols-outlined">health_and_safety</span>
+    </div>
+    <div>
+      <div class="brand-title">PWS Care Companion</div>
+      <div class="patient-tag">
+        <span class="material-symbols-outlined" style="font-size:0.9rem;">child_care</span>
+        Leo (Stage 1b Toddler, 13m)
+      </div>
     </div>
   </div>
+
   <div class="header-controls">
-    <!-- Active User & Login Button -->
-    <button type="button" class="header-btn" onclick="openLoginModal()">
-      <span class="material-symbols-outlined" style="color:var(--accent-light);">account_circle</span>
-      <span id="currentUserLabel">Sign In / Switch User</span>
+    <!-- Active User Button -->
+    <button type="button" class="btn-glass" onclick="openLoginModal()">
+      <span class="material-symbols-outlined" style="color:var(--primary-cyan);">account_circle</span>
+      <span id="currentUserLabel">Sign In</span>
     </button>
-    <!-- Role Selector Dropdown -->
-    <select id="roleSelect" class="role-selector" onchange="switchRole(this.value)">
-      <option value="Admin">👑 Admin (Parent)</option>
-      <option value="Caregiver">🤲 Caregiver (Babysitter)</option>
-      <option value="Specialist">🩺 Specialist (PT/OT/Dietitian)</option>
+
+    <!-- Role Selector -->
+    <select id="roleSelect" class="role-dropdown" onchange="switchRole(this.value)">
+      <option value="Admin">👑 Admin (Father / Mother)</option>
+      <option value="Caregiver">🤲 Caregiver (Nanny)</option>
+      <option value="Specialist">🩺 Specialist (Therapist / Doctor)</option>
     </select>
-    <!-- Invite Button -->
-    <button type="button" class="header-btn" style="background:var(--accent); border-color:var(--accent-light);" onclick="openInviteModal()">
+
+    <!-- Invite Caregiver Button -->
+    <button type="button" class="btn-glass btn-accent" onclick="openInviteModal()">
       <span class="material-symbols-outlined">person_add</span>
-      Invite Caregiver
+      Invite
     </button>
-    <button type="button" class="header-btn" onclick="resetChatSession()">
+
+    <button type="button" class="btn-glass" onclick="resetChatSession()">
       <span class="material-symbols-outlined">refresh</span>
       Reset
     </button>
-    <button type="button" class="emergency-btn" onclick="openEmergencyModal()">
+
+    <button type="button" class="btn-glass btn-alert" onclick="openEmergencyModal()">
       <span class="material-symbols-outlined">warning</span>
       Alert Protocol
     </button>
   </div>
 </header>
 
-<div class="app-container">
+<div class="workspace">
   <!-- Left Panel: Conversational AI Agent -->
-  <div class="chat-panel">
+  <div class="chat-section">
     <div id="log">
-      <div class="welcome-card" id="welcomeCard">
-        <div class="welcome-title" id="welcomeTitle">
+      <div class="welcome-hero" id="welcomeCard">
+        <div class="hero-title" id="welcomeTitle">
           <span class="material-symbols-outlined">shield_person</span>
           Active Role: Admin (Parent)
         </div>
-        <div class="welcome-desc" id="welcomeDesc">
-          Full management privileges active: Add appointments, edit child profile, log medications, invite caregivers, and search grounded PWS medical guidelines.
+        <div class="hero-desc" id="welcomeDesc">
+          Grounded on official PWS guidelines from FPWR & PWSA USA. Manage appointments, GH injections, therapy progress, and search medical literature.
         </div>
       </div>
     </div>
 
-    <!-- Dynamic Quick Actions Bar -->
-    <div class="quick-bar" id="quickBar"></div>
+    <!-- Quick Action Chips Bar -->
+    <div class="action-chips-bar" id="quickBar"></div>
 
-    <form id="form">
-      <input id="input" placeholder="Ask a PWS medical question or manage care records..." autocomplete="off" autofocus>
-      <button type="submit" class="send-btn">
-        <span>Send</span>
-        <span class="material-symbols-outlined" style="font-size:1.1rem;">send</span>
-      </button>
-    </form>
+    <!-- Input Dock -->
+    <div class="input-dock">
+      <form id="form">
+        <input id="input" placeholder="Ask PWS medical questions or manage care records..." autocomplete="off" autofocus>
+        <button type="submit">
+          <span>Send</span>
+          <span class="material-symbols-outlined" style="font-size:1.1rem;">send</span>
+        </button>
+      </form>
+    </div>
   </div>
 
   <!-- Right Panel: Live Care Dashboard -->
-  <div class="dashboard-panel">
+  <div class="side-dashboard">
     <!-- Calorie Tracker Widget -->
-    <div class="dash-card">
-      <div class="dash-title">
-        <span>⚡ Daily Calorie Tracker</span>
-        <span style="font-size:0.8rem; color:var(--accent-light);">Target: 1200 kcal</span>
+    <div class="widget-card">
+      <div class="widget-header">
+        <div class="widget-title">
+          <span class="material-symbols-outlined">bolt</span>
+          Daily Calorie Tracker
+        </div>
+        <span style="font-size:0.75rem; color:var(--primary-cyan); font-weight:700;">1200 kcal Cap</span>
       </div>
-      <div class="calorie-container">
-        <div class="calorie-ring">
-          <div class="calorie-ring-inner">
-            <span>600</span>
-            <span style="font-size:0.65rem; color:var(--text-secondary);">kcal</span>
+      <div class="meter-box">
+        <div style="position:relative; display:flex; align-items:center; justify-content:center;">
+          <svg class="meter-svg" viewBox="0 0 80 80">
+            <circle class="meter-bg" cx="40" cy="40" r="35" />
+            <circle class="meter-fill" cx="40" cy="40" r="35" />
+          </svg>
+          <div class="meter-center">
+            <div>600</div>
+            <div style="font-size:0.6rem; color:var(--text-muted);">kcal</div>
           </div>
         </div>
-        <div class="calorie-stats">
-          <div class="stat-row"><span>Consumed:</span><span class="stat-val">600 kcal</span></div>
-          <div class="stat-row"><span>Remaining:</span><span class="stat-val" style="color:var(--accent-light);">600 kcal</span></div>
-          <div class="stat-row"><span>Phase:</span><span class="stat-val">Stage 1b</span></div>
+        <div style="flex:1; display:flex; flex-direction:column; gap:0.4rem; font-size:0.85rem;">
+          <div style="display:flex; justify-content:space-between; color:var(--text-muted);"><span>Consumed:</span><strong style="color:#fff;">600 kcal</strong></div>
+          <div style="display:flex; justify-content:space-between; color:var(--text-muted);"><span>Remaining:</span><strong style="color:var(--primary-cyan);">600 kcal</strong></div>
+          <div style="display:flex; justify-content:space-between; color:var(--text-muted);"><span>Phase:</span><strong style="color:#fff;">Stage 1b</strong></div>
         </div>
       </div>
     </div>
 
-    <!-- Family Live Feed Widget (30-Day Window) -->
-    <div class="dash-card">
-      <div class="dash-title">
-        <span>👥 Family Activity Feed</span>
-        <span class="material-symbols-outlined" style="font-size:1rem;">history</span>
-      </div>
-      <div style="font-size:0.75rem; color:var(--accent-light); margin-bottom:0.6rem; display:flex; align-items:center; gap:0.3rem; background:var(--accent-glow); padding:0.3rem 0.6rem; border-radius:8px; border:1px solid var(--accent);">
-        <span class="material-symbols-outlined" style="font-size:0.9rem;">verified</span>
-        Showing Last 30 Days • Full DB Retention
-      </div>
-      <div class="feed-list">
-        <div class="feed-item">
-          <div class="feed-avatar">M</div>
-          <div><strong>Mom</strong> logged breakfast (250 kcal) <br><span style="font-size:0.75rem; color:var(--text-secondary);">Today @ 8:15 AM</span></div>
+    <!-- Family Activity Feed Widget -->
+    <div class="widget-card">
+      <div class="widget-header">
+        <div class="widget-title">
+          <span class="material-symbols-outlined">history</span>
+          Family Feed (30 Days)
         </div>
-        <div class="feed-item">
-          <div class="feed-avatar" style="background:#8b5cf6;">D</div>
-          <div><strong>Dad</strong> added Dr. XYZ appointment <br><span style="font-size:0.75rem; color:var(--text-secondary);">Today @ 9:30 AM</span></div>
+        <span class="material-symbols-outlined" style="font-size:1rem; color:var(--primary-cyan);">verified</span>
+      </div>
+      <div class="feed-timeline">
+        <div class="timeline-item">
+          <div class="avatar-circle">M</div>
+          <div><strong>Mom</strong> logged breakfast (250 kcal) <br><span style="font-size:0.75rem; color:var(--text-muted);">Today @ 8:15 AM</span></div>
         </div>
-        <div class="feed-item">
-          <div class="feed-avatar" style="background:#ec4899;">S</div>
-          <div><strong>Sarah (PT)</strong> completed Physical Therapy <br><span style="font-size:0.75rem; color:var(--text-secondary);">Today @ 11:00 AM</span></div>
+        <div class="timeline-item">
+          <div class="avatar-circle" style="background:var(--primary-purple);">D</div>
+          <div><strong>Dad</strong> added Dr. XYZ appointment <br><span style="font-size:0.75rem; color:var(--text-muted);">Today @ 9:30 AM</span></div>
+        </div>
+        <div class="timeline-item">
+          <div class="avatar-circle" style="background:#ec4899;">S</div>
+          <div><strong>Sarah (PT)</strong> completed Physical Therapy <br><span style="font-size:0.75rem; color:var(--text-muted);">Today @ 11:00 AM</span></div>
         </div>
       </div>
-      <button type="button" class="header-btn" style="width:100%; justify-content:center; margin-top:0.6rem; font-size:0.82rem;" onclick="sendQuick('Show me all medication and therapy logs from the last 30 days')">
+      <button type="button" class="btn-glass" style="width:100%; justify-content:center; margin-top:0.8rem; font-size:0.8rem;" onclick="sendQuick('Show me all medication and therapy logs from the last 30 days')">
         <span class="material-symbols-outlined" style="font-size:0.9rem;">list_alt</span>
         Query 30-Day Care Logs
       </button>
     </div>
 
-    <!-- Upcoming Medical Appointments Widget -->
-    <div class="dash-card">
-      <div class="dash-title">
-        <span>📅 Upcoming Care Schedule</span>
-        <span class="material-symbols-outlined" style="font-size:1rem;">event</span>
+    <!-- Upcoming Schedule Widget -->
+    <div class="widget-card">
+      <div class="widget-header">
+        <div class="widget-title">
+          <span class="material-symbols-outlined">event</span>
+          Care Schedule
+        </div>
       </div>
-      <div class="appt-item" onclick="sendQuick('Show me upcoming appointments')" style="cursor:pointer;">
-        <div class="appt-header">
+      <div class="appt-card" onclick="sendQuick('Show me upcoming appointments')">
+        <div style="display:flex; justify-content:space-between; font-weight:600; font-size:0.88rem;">
           <span>Dr. XYZ (Endocrinologist)</span>
           <span style="color:#38bdf8; font-size:0.75rem;">In 25 days</span>
         </div>
-        <div class="appt-time">
+        <div style="font-size:0.8rem; color:var(--primary-cyan); margin-top:0.3rem; display:flex; align-items:center; gap:0.3rem;">
           <span class="material-symbols-outlined" style="font-size:0.9rem;">schedule</span>
           Aug 30, 2026 @ 9:00 AM
         </div>
-        <div style="font-size:0.78rem; color:var(--text-secondary);">City Children's Hospital</div>
       </div>
-      <div class="appt-item" onclick="sendQuick('Show me upcoming appointments')" style="cursor:pointer;">
-        <div class="appt-header">
+      <div class="appt-card" onclick="sendQuick('Show me upcoming appointments')">
+        <div style="display:flex; justify-content:space-between; font-weight:600; font-size:0.88rem;">
           <span>Sarah Jenkins, RD</span>
           <span style="color:#38bdf8; font-size:0.75rem;">In 31 days</span>
         </div>
-        <div class="appt-time">
+        <div style="font-size:0.8rem; color:var(--primary-cyan); margin-top:0.3rem; display:flex; align-items:center; gap:0.3rem;">
           <span class="material-symbols-outlined" style="font-size:0.9rem;">schedule</span>
           Sept 05, 2026 @ 2:00 PM
         </div>
-        <div style="font-size:0.78rem; color:var(--text-secondary);">Pediatric Nutrition Clinic</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Login Modal Window -->
+<!-- Login Modal -->
 <div class="modal-overlay" id="loginModal" onclick="closeLoginModal(event)">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-header">
@@ -615,45 +717,38 @@
       <button type="button" class="modal-close" onclick="closeLoginModal()">&times;</button>
     </div>
     
-    <div style="font-size:0.9rem; line-height:1.6; color:#f8fafc;">
-      <p style="color:var(--text-secondary); margin-bottom:1rem;">Select a stated user or enter your Username and Password shared by Admin:</p>
-      
-      <!-- Username & Password Login Form -->
-      <form id="loginAuthForm" onsubmit="handleUserSignIn(event)" style="display:flex; flex-direction:column; gap:0.9rem; background:#0f172a; padding:1.2rem; border-radius:12px; border:1px solid var(--border);">
-        
-        <div>
-          <label style="font-size:0.82rem; color:var(--text-secondary); font-weight:600;">Select Stated User:</label>
-          <select id="userSelectDropdown" class="role-selector" style="width:100%; margin-top:0.3rem; padding:0.6rem; font-size:0.88rem;" onchange="autoFillUsername(this.value)">
-            <option value="father">👑 Father (John - Admin)</option>
-            <option value="mother">👑 Mother (Sarah - Admin)</option>
-            <option value="nanny">🤲 Nanny (Emily - Caregiver)</option>
-            <option value="therapist">🏃 Therapist (Dr. James - Physical Therapy)</option>
-            <option value="doctor">🩺 Doctor (Dr. XYZ - Pediatric Endocrinologist)</option>
-          </select>
-        </div>
+    <form id="loginAuthForm" onsubmit="handleUserSignIn(event)" style="display:flex; flex-direction:column; gap:1rem;">
+      <div>
+        <label style="font-size:0.82rem; color:var(--text-muted); font-weight:600;">Select Stated Role / User:</label>
+        <select id="userSelectDropdown" class="role-dropdown" style="width:100%; margin-top:0.3rem; padding:0.7rem;" onchange="autoFillUsername(this.value)">
+          <option value="father">👑 Father (John - Admin)</option>
+          <option value="mother">👑 Mother (Sarah - Admin)</option>
+          <option value="nanny">🤲 Nanny (Emily - Caregiver)</option>
+          <option value="therapist">🏃 Therapist (Dr. James - Physical Therapy)</option>
+          <option value="doctor">🩺 Doctor (Dr. XYZ - Pediatric Endocrinologist)</option>
+        </select>
+      </div>
 
-        <div>
-          <label style="font-size:0.82rem; color:var(--text-secondary); font-weight:600;">Username / Email:</label>
-          <input id="loginUsername" type="text" value="john@pws.org" placeholder="e.g. john@pws.org" required style="width:100%; margin-top:0.3rem; padding:0.65rem; font-size:0.88rem; background:#1e293b; border:1px solid var(--border); border-radius:8px; color:#fff;">
-        </div>
+      <div>
+        <label style="font-size:0.82rem; color:var(--text-muted); font-weight:600;">Username / Email:</label>
+        <input id="loginUsername" type="text" value="father@pws.org" required style="width:100%; margin-top:0.3rem; padding:0.7rem; background:rgba(30,41,59,0.6); border:1px solid var(--border-glass); border-radius:10px; color:#fff; font-size:0.9rem;">
+      </div>
 
-        <div>
-          <label style="font-size:0.82rem; color:var(--text-secondary); font-weight:600;">Password (shared by Admin):</label>
-          <input id="loginPassword" type="password" placeholder="Enter password..." required style="width:100%; margin-top:0.3rem; padding:0.65rem; font-size:0.88rem; background:#1e293b; border:1px solid var(--border); border-radius:8px; color:#fff;">
-        </div>
+      <div>
+        <label style="font-size:0.82rem; color:var(--text-muted); font-weight:600;">Password:</label>
+        <input id="loginPassword" type="password" placeholder="Enter password..." required style="width:100%; margin-top:0.3rem; padding:0.7rem; background:rgba(30,41,59,0.6); border:1px solid var(--border-glass); border-radius:10px; color:#fff; font-size:0.9rem;">
+      </div>
 
-        <div id="loginErrorMsg" style="display:none; color:#fca5a5; background:var(--alert-bg); border:1px solid var(--alert-red); padding:0.6rem; border-radius:8px; font-size:0.82rem; align-items:center; gap:0.4rem;">
-          <span class="material-symbols-outlined" style="font-size:1rem;">error</span>
-          <span id="loginErrorText">Incorrect password. Please enter the password shared by Admin.</span>
-        </div>
+      <div id="loginErrorMsg" style="display:none; color:#fca5a5; background:rgba(239,68,68,0.15); border:1px solid #ef4444; padding:0.6rem; border-radius:8px; font-size:0.82rem; align-items:center; gap:0.4rem;">
+        <span class="material-symbols-outlined" style="font-size:1rem;">error</span>
+        <span id="loginErrorText">Incorrect password.</span>
+      </div>
 
-        <button type="submit" class="send-btn" style="justify-content:center; padding:0.75rem; margin-top:0.2rem; font-size:0.95rem;">
-          <span class="material-symbols-outlined">login</span>
-          Sign In
-        </button>
-      </form>
-
-    </div>
+      <button type="submit" class="btn-glass btn-accent" style="justify-content:center; padding:0.85rem; margin-top:0.4rem; font-size:0.95rem;">
+        <span class="material-symbols-outlined">login</span>
+        Sign In
+      </button>
+    </form>
   </div>
 </div>
 
@@ -667,85 +762,59 @@
       </div>
       <button type="button" class="modal-close" onclick="closeInviteModal()">&times;</button>
     </div>
-    <div style="font-size:0.9rem; line-height:1.6; color:#f8fafc; display:flex; flex-direction:column; gap:0.9rem;">
-      <p style="color:var(--text-secondary); margin:0;">Admin App Sharing: Enter caregiver details to automatically generate their Username, Password, and Role credentials.</p>
-      
+    <div style="font-size:0.9rem; line-height:1.6; display:flex; flex-direction:column; gap:1rem;">
       <div>
-        <label style="font-size:0.82rem; color:var(--text-secondary); font-weight:600;">Caregiver / Specialist Name:</label>
-        <input id="inviteNameInput" type="text" placeholder="e.g. Alex Miller" value="Alex Miller" style="width:100%; margin-top:0.2rem; padding:0.6rem; font-size:0.88rem; background:#0f172a; border:1px solid var(--border); border-radius:8px; color:#fff;" oninput="generateInviteCredentials()">
+        <label style="font-size:0.82rem; color:var(--text-muted); font-weight:600;">Caregiver / Specialist Name:</label>
+        <input id="inviteNameInput" type="text" value="Alex Miller" style="width:100%; margin-top:0.3rem; padding:0.65rem; background:rgba(30,41,59,0.6); border:1px solid var(--border-glass); border-radius:10px; color:#fff;" oninput="generateInviteCredentials()">
       </div>
 
       <div>
-        <label style="font-size:0.82rem; color:var(--text-secondary); font-weight:600;">Assigned Privilege Role:</label>
-        <select id="inviteRoleSelect" class="role-selector" style="width:100%; margin-top:0.2rem; padding:0.6rem; font-size:0.88rem;" onchange="generateInviteCredentials()">
-          <option value="Caregiver">🤲 Caregiver (Babysitter / Family)</option>
-          <option value="Specialist">🩺 Specialist (PT / OT / Dietitian)</option>
+        <label style="font-size:0.82rem; color:var(--text-muted); font-weight:600;">Assigned Role:</label>
+        <select id="inviteRoleSelect" class="role-dropdown" style="width:100%; margin-top:0.3rem; padding:0.65rem;" onchange="generateInviteCredentials()">
+          <option value="Caregiver">🤲 Caregiver (Nanny / Family)</option>
+          <option value="Specialist">🩺 Specialist (Therapist / Doctor)</option>
           <option value="Admin">👑 Co-Admin (Parent)</option>
         </select>
       </div>
 
-      <!-- Generated Credentials Preview Box -->
-      <div style="background:#0f172a; padding:0.9rem; border-radius:10px; border:1px solid var(--accent); display:flex; flex-direction:column; gap:0.5rem;">
-        <div style="font-size:0.82rem; font-weight:700; color:var(--accent-light); display:flex; align-items:center; gap:0.3rem;">
+      <div style="background:rgba(15,23,42,0.8); padding:1rem; border-radius:12px; border:1px solid var(--border-accent); display:flex; flex-direction:column; gap:0.6rem;">
+        <div style="font-size:0.85rem; font-weight:700; color:var(--primary-cyan); display:flex; align-items:center; gap:0.4rem;">
           <span class="material-symbols-outlined" style="font-size:1rem;">verified_user</span>
-          Auto-Generated Credentials Preview:
+          Auto-Generated Credentials:
         </div>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.5rem; font-size:0.82rem;">
-          <div>
-            <span style="color:var(--text-secondary);">Username:</span><br>
-            <input id="genUsername" readonly style="width:100%; font-size:0.8rem; background:#1e293b; color:#2dd4bf; border:1px solid var(--border); padding:0.35rem 0.5rem; border-radius:6px;">
-          </div>
-          <div>
-            <span style="color:var(--text-secondary);">Password:</span><br>
-            <input id="genPassword" readonly style="width:100%; font-size:0.8rem; background:#1e293b; color:#2dd4bf; border:1px solid var(--border); padding:0.35rem 0.5rem; border-radius:6px;">
-          </div>
-        </div>
-        <div>
-          <span style="color:var(--text-secondary); font-size:0.82rem;">Full Share Link:</span>
-          <input id="inviteUrlInput" readonly style="width:100%; font-size:0.78rem; margin-top:0.2rem; background:#1e293b; color:#2dd4bf; border:1px solid var(--border); padding:0.4rem 0.6rem; border-radius:6px;">
+          <div><span style="color:var(--text-muted);">Username:</span><br><input id="genUsername" readonly style="width:100%; background:transparent; color:var(--primary-cyan); border:1px solid var(--border-glass); padding:0.4rem; border-radius:6px;"></div>
+          <div><span style="color:var(--text-muted);">Password:</span><br><input id="genPassword" readonly style="width:100%; background:transparent; color:var(--primary-cyan); border:1px solid var(--border-glass); padding:0.4rem; border-radius:6px;"></div>
         </div>
       </div>
 
-      <div style="display:flex; flex-direction:column; gap:0.6rem; margin-top:0.2rem;">
-        <button type="button" class="share-btn whatsapp" onclick="shareWhatsApp()">
-          <span class="material-symbols-outlined">chat</span>
-          Send Credentials & Link via WhatsApp
-        </button>
-        <button type="button" class="share-btn sms" onclick="shareSMS()">
-          <span class="material-symbols-outlined">sms</span>
-          Send Credentials & Link via SMS
-        </button>
-        <button type="button" class="share-btn copy" onclick="copyInviteLink()">
-          <span class="material-symbols-outlined">content_copy</span>
-          Copy Credentials & Link to Clipboard
-        </button>
+      <div style="display:flex; flex-direction:column; gap:0.6rem;">
+        <button type="button" class="share-btn whatsapp" onclick="shareWhatsApp()"><span class="material-symbols-outlined">chat</span> Send via WhatsApp</button>
+        <button type="button" class="share-btn sms" onclick="shareSMS()"><span class="material-symbols-outlined">sms</span> Send via SMS</button>
+        <button type="button" class="share-btn copy" onclick="copyInviteLink()"><span class="material-symbols-outlined">content_copy</span> Copy to Clipboard</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Medical Alert Protocol Modal -->
+<!-- Emergency Medical Alert Protocol Modal -->
 <div class="modal-overlay" id="alertModal" onclick="closeEmergencyModal(event)">
-  <div class="modal-box" style="border-color: var(--alert-red);" onclick="event.stopPropagation()">
+  <div class="modal-box" style="border-color: #ef4444;" onclick="event.stopPropagation()">
     <div class="modal-header">
-      <div class="modal-title">
+      <div class="modal-title" style="color:#fca5a5;">
         <span class="material-symbols-outlined">warning</span>
         PWSA USA Medical Alert Protocol
       </div>
-      <button class="modal-close" onclick="closeEmergencyModal()">&times;</button>
+      <button type="button" class="modal-close" onclick="closeEmergencyModal()">&times;</button>
     </div>
-    <div style="font-size:0.9rem; line-height:1.6; color:#f8fafc;">
-      <p style="color:#fca5a5; font-weight:600;">🚨 Critical Anesthesia & Emergency Precautions for PWS Patients:</p>
-      <ul>
-        <li><strong>High Pain Threshold:</strong> Patients may NOT report pain standardly. Tachycardia or behavioral changes may be sole indicators of severe illness.</li>
+    <div style="font-size:0.9rem; line-height:1.6;">
+      <p style="color:#fca5a5; font-weight:600; margin-bottom:0.8rem;">🚨 Critical Anesthesia & Emergency Precautions:</p>
+      <ul style="padding-left:1.2rem; margin-bottom:1rem; color:var(--text-muted);">
+        <li><strong>High Pain Threshold:</strong> Patients may NOT report pain standardly. Tachycardia or behavioral changes may be sole indicators.</li>
         <li><strong>Gastroparesis & Gastric Distension:</strong> Severe risk of delayed gastric emptying. Watch for sudden abdominal swelling or vomiting.</li>
-        <li><strong>Airway Obstruction & Apnea:</strong> Narrow larynx and hypotonia increase airway collapse risk during sedation. Continuous pulse oximetry required.</li>
+        <li><strong>Airway Obstruction & Apnea:</strong> Hypotonia increases airway collapse risk during sedation. Continuous pulse oximetry required.</li>
       </ul>
-      <div style="margin-top:1rem; padding:0.8rem; background:#0f172a; border-radius:8px; border:1px solid var(--border);">
-        <strong>🏥 On-Call Endocrinology Emergency:</strong> (555) 019-2831<br>
-        <strong>📄 PWSA USA Medical Alert Pocket Card:</strong> Available in Cloud Storage
-      </div>
-      <button type="button" class="emergency-btn" style="margin-top:1rem; width:100%; justify-content:center;" onclick="closeEmergencyModal(); sendQuick('What are the official PWS guidelines for anesthesia precautions?');">
+      <button type="button" class="btn-glass btn-alert" style="width:100%; justify-content:center;" onclick="closeEmergencyModal(); sendQuick('What are the official PWS guidelines for anesthesia precautions?');">
         Ask Agent Full Clinical Details
       </button>
     </div>
@@ -757,7 +826,19 @@ const log = document.getElementById("log");
 const form = document.getElementById("form");
 const input = document.getElementById("input");
 let currentRole = "Admin";
-let currentUser = "John (Father)";
+let currentUser = "Father (John)";
+
+const adminUsersDB = {
+  "father": { name: "Father (John)", role: "Admin", email: "father@pws.org", pass: "father123" },
+  "mother": { name: "Mother (Sarah)", role: "Admin", email: "mother@pws.org", pass: "mother123" },
+  "nanny": { name: "Nanny (Emily)", role: "Caregiver", email: "nanny@pws.org", pass: "nanny123" },
+  "therapist": { name: "Therapist (Dr. James)", role: "Specialist", email: "therapist@pws.org", pass: "therapist123" },
+  "doctor": { name: "Doctor (Dr. XYZ)", role: "Specialist", email: "doctor@pws.org", pass: "doctor123" },
+  "john": { name: "Father (John)", role: "Admin", email: "father@pws.org", pass: "father123" },
+  "sarah": { name: "Mother (Sarah)", role: "Admin", email: "mother@pws.org", pass: "mother123" },
+  "emily": { name: "Nanny (Emily)", role: "Caregiver", email: "nanny@pws.org", pass: "nanny123" },
+  "james": { name: "Therapist (Dr. James)", role: "Specialist", email: "therapist@pws.org", pass: "therapist123" }
+};
 
 const roleConfigs = {
   Admin: {
@@ -772,7 +853,7 @@ const roleConfigs = {
     ]
   },
   Caregiver: {
-    title: "Active Role: Caregiver (Babysitter / Family)",
+    title: "Active Role: Caregiver (Nanny / Family)",
     desc: "Caregiver privileges active: Log daily meals & calorie intake, log medication doses, view daily routine schedule, and view emergency protocols.",
     chips: [
       { label: '🥗 Log Meal (250 kcal)', prompt: 'Log breakfast meal for Leo: 250 kcal consisting of oatmeal and scrambled egg whites' },
@@ -782,7 +863,7 @@ const roleConfigs = {
     ]
   },
   Specialist: {
-    title: "Active Role: Specialist (Therapist / Dietitian)",
+    title: "Active Role: Specialist (Therapist / Doctor)",
     desc: "Specialist privileges active: Log PT/OT/Speech session progress, log dietary evaluations, view care profile, and search medical guidelines.",
     chips: [
       { label: '🏃 Log Physical Therapy (30 min)', prompt: 'Log Physical Therapy session: 30 minutes of trunk stabilization and core balance games. Achieved standing balance milestone.' },
@@ -806,24 +887,12 @@ function switchRole(role) {
   config.chips.forEach(c => {
     const btn = document.createElement("button");
     btn.type = "button";
-    btn.className = "chip";
+    btn.className = "chip-btn";
     btn.onclick = () => sendQuick(c.prompt);
-    btn.innerHTML = `<span class="material-symbols-outlined" style="font-size:1rem;">touch_app</span> ${c.label}`;
+    btn.innerHTML = `<span class="material-symbols-outlined" style="font-size:1rem; color:var(--primary-cyan);">touch_app</span> ${c.label}`;
     container.appendChild(btn);
   });
 }
-
-const adminUsersDB = {
-  "father": { name: "Father (John)", role: "Admin", email: "father@pws.org", pass: "father123" },
-  "mother": { name: "Mother (Sarah)", role: "Admin", email: "mother@pws.org", pass: "mother123" },
-  "nanny": { name: "Nanny (Emily)", role: "Caregiver", email: "nanny@pws.org", pass: "nanny123" },
-  "therapist": { name: "Therapist (Dr. James)", role: "Specialist", email: "therapist@pws.org", pass: "therapist123" },
-  "doctor": { name: "Doctor (Dr. XYZ)", role: "Specialist", email: "doctor@pws.org", pass: "doctor123" },
-  "john": { name: "Father (John)", role: "Admin", email: "father@pws.org", pass: "father123" },
-  "sarah": { name: "Mother (Sarah)", role: "Admin", email: "mother@pws.org", pass: "mother123" },
-  "emily": { name: "Nanny (Emily)", role: "Caregiver", email: "nanny@pws.org", pass: "nanny123" },
-  "james": { name: "Therapist (Dr. James)", role: "Specialist", email: "therapist@pws.org", pass: "therapist123" }
-};
 
 function autoFillUsername(key) {
   const user = adminUsersDB[key];
@@ -834,9 +903,7 @@ function autoFillUsername(key) {
   }
 }
 
-function openLoginModal() {
-  document.getElementById("loginModal").style.display = "flex";
-}
+function openLoginModal() { document.getElementById("loginModal").style.display = "flex"; }
 function closeLoginModal(e) {
   if (!e || e.target === document.getElementById("loginModal") || e.type === "click") {
     document.getElementById("loginModal").style.display = "none";
@@ -850,17 +917,16 @@ function handleUserSignIn(ev) {
   const errorBox = document.getElementById("loginErrorMsg");
   const errorText = document.getElementById("loginErrorText");
 
-  // Find user by key or email match
   let matchedKey = Object.keys(adminUsersDB).find(k => k === inputUser || adminUsersDB[k].email.toLowerCase() === inputUser);
   if (!matchedKey) {
-    errorText.textContent = "User not found. Please select a stated user or check email.";
+    errorText.textContent = "User not found. Please select a stated user.";
     errorBox.style.display = "flex";
     return;
   }
 
   const userObj = adminUsersDB[matchedKey];
   if (inputPass !== userObj.pass) {
-    errorText.textContent = "Invalid password. Please enter the password shared by Admin.";
+    errorText.textContent = "Invalid password. Please enter correct password.";
     errorBox.style.display = "flex";
     return;
   }
@@ -879,15 +945,14 @@ function selectUserProfile(name, role) {
   switchRole(role);
   closeLoginModal();
 
-  // Appends glowing confirmation banner in chat feed
   const b = bubble("agent");
   b.innerHTML = `
-    <div style="color:var(--accent-light); font-weight:600; display:flex; align-items:center; gap:0.4rem;">
-      <span class="material-symbols-outlined" style="color:#2dd4bf;">check_circle</span>
-      Successfully signed in as <strong>${name}</strong>
+    <div style="color:var(--primary-cyan); font-weight:600; display:flex; align-items:center; gap:0.4rem;">
+      <span class="material-symbols-outlined">check_circle</span>
+      Signed in as <strong>${name}</strong>
     </div>
-    <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.3rem;">
-      Active Role: <strong>${role}</strong>. Your session context is now verified and active.
+    <div style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+      Active Role: <strong>${role}</strong>. Session context verified.
     </div>`;
 }
 
@@ -932,32 +997,28 @@ function generateInviteCredentials() {
   const url = `${baseUrl}?invite=${code}&user=${encodeURIComponent(genUser)}&pass=${encodeURIComponent(genPass)}&role=${role}&name=${encodeURIComponent(nameInput)}`;
   document.getElementById("inviteUrlInput").value = url;
 
-  // Save generated credentials in adminUsersDB & localStorage
   adminUsersDB[genUser] = { name: `${nameInput} (${role})`, role: role, email: `${genUser}@pws.org`, pass: genPass };
-  
   currentGeneratedInvite = { name: nameInput, username: genUser, password: genPass, role: role, url: url };
 }
 
 function shareWhatsApp() {
   const { name, username, password, role, url } = currentGeneratedInvite;
-  const msg = encodeURIComponent(`Hi ${name}! You are invited to join Leo's PWS Care Companion team as a ${role}.\n\n🔗 App Link: ${url}\n👤 Username: ${username}\n🔑 Password: ${password}\n🎭 Role: ${role}`);
+  const msg = encodeURIComponent(`Hi ${name}! You are invited to join Leo's PWS Care Companion team as a ${role}.\n\n🔗 Link: ${url}\n👤 Username: ${username}\n🔑 Password: ${password}`);
   window.open(`https://wa.me/?text=${msg}`, '_blank');
 }
 
 function shareSMS() {
   const { name, username, password, role, url } = currentGeneratedInvite;
-  const msg = encodeURIComponent(`You are invited to join Leo's PWS Care Companion team as a ${role}.\nLink: ${url}\nUsername: ${username}\nPassword: ${password}`);
+  const msg = encodeURIComponent(`PWS Care Companion Invite:\nLink: ${url}\nUsername: ${username}\nPassword: ${password}`);
   window.open(`sms:?body=${msg}`, '_blank');
 }
 
 function copyInviteLink() {
   const { username, password, role, url } = currentGeneratedInvite;
-  const text = `App Link: ${url}\nUsername: ${username}\nPassword: ${password}\nRole: ${role}`;
-  navigator.clipboard.writeText(text);
-  alert("Generated Credentials & Invite Link copied to clipboard!");
+  navigator.clipboard.writeText(`App Link: ${url}\nUsername: ${username}\nPassword: ${password}\nRole: ${role}`);
+  alert("Generated Credentials & Link copied to clipboard!");
 }
 
-// Check URL Parameters or Local Storage on Page Load
 function checkUrlParams() {
   const params = new URLSearchParams(window.location.search);
   const inviteUser = params.get("user");
@@ -967,20 +1028,16 @@ function checkUrlParams() {
   const inviteCode = params.get("invite");
 
   if (inviteUser && invitePass && inviteRole) {
-    // Register credential dynamically
     adminUsersDB[inviteUser] = { name: `${inviteName} (${inviteRole})`, role: inviteRole, email: `${inviteUser}@pws.org`, pass: invitePass };
-    
-    // Auto-login invited user
     selectUserProfile(`${inviteName} (${inviteRole})`, inviteRole);
-    
     log.innerHTML = `
-      <div class="welcome-card" style="border-color:var(--accent-light);">
-        <div class="welcome-title">
-          <span class="material-symbols-outlined" style="color:#2dd4bf;">mark_email_read</span>
+      <div class="welcome-hero" style="border-color:var(--primary-cyan);">
+        <div class="hero-title">
+          <span class="material-symbols-outlined">mark_email_read</span>
           Invitation Accepted (Code #${inviteCode})
         </div>
-        <div class="welcome-desc">
-          Welcome <strong>${inviteName}</strong>! Your care account has been created.<br>
+        <div class="hero-desc">
+          Welcome <strong>${inviteName}</strong>! Your account has been activated.<br>
           Username: <code>${inviteUser}</code> | Password: <code>${invitePass}</code> | Role: <strong>${inviteRole}</strong>.
         </div>
       </div>`;
@@ -988,38 +1045,13 @@ function checkUrlParams() {
     restoreStoredSession();
   }
 }
-function inviteConfigs(role) { return ["Admin", "Caregiver", "Specialist"].includes(role); }
-
-// Initialize default on load
-checkUrlParams();
-
-function sendQuick(txt) {
-  input.value = txt;
-  form.dispatchEvent(new Event("submit"));
-}
-
-async function resetChatSession() {
-  try {
-    await fetch("/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: "Hello", role: currentRole, reset: true })
-    });
-  } catch (e) {}
-  log.innerHTML = `
-    <div class="welcome-card">
-      <div class="welcome-title">
-        <span class="material-symbols-outlined">smart_toy</span>
-        Session Refreshed!
-      </div>
-      <div class="welcome-desc">
-        Chat context refreshed for ${currentRole} role. How can I help you and Leo today?
-      </div>
-    </div>`;
-}
 
 function openEmergencyModal() { document.getElementById("alertModal").style.display = "flex"; }
-function closeEmergencyModal() { document.getElementById("alertModal").style.display = "none"; }
+function closeEmergencyModal(e) {
+  if (!e || e.target === document.getElementById("alertModal") || e.type === "click") {
+    document.getElementById("alertModal").style.display = "none";
+  }
+}
 
 function el(tag, cls, text) {
   const e = document.createElement(tag);
@@ -1029,15 +1061,15 @@ function el(tag, cls, text) {
 }
 
 function bubble(who) {
-  const m = el("div", "msg " + who);
-  const b = el("div", "bubble");
+  const m = el("div", "msg-row " + who);
+  const b = el("div", "msg-bubble");
   m.appendChild(b);
   log.appendChild(m);
   log.scrollTop = log.scrollHeight;
   return b;
 }
 
-/* --- A2UI Component Mini-Renderer --- */
+/* A2UI Component Renderer */
 function boundStr(v) {
   if (v == null) return "";
   if (typeof v === "string") return v;
@@ -1160,11 +1192,36 @@ function renderReply(b, parts) {
   if (textStr) b.appendChild(el("div", null, textStr));
 
   if (a2ui.length) {
-    b.classList.add("rich");
+    b.classList.add("rich-container");
     if (!renderSurface(a2ui, b)) b.appendChild(el("div", null, flattenText(a2ui) || "(no card content)"));
   }
   if (!b.childNodes.length) b.textContent = "(no response)";
   log.scrollTop = log.scrollHeight;
+}
+
+function sendQuick(txt) {
+  input.value = txt;
+  form.dispatchEvent(new Event("submit"));
+}
+
+async function resetChatSession() {
+  try {
+    await fetch("/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: "Hello", role: currentRole, reset: true })
+    });
+  } catch (e) {}
+  log.innerHTML = `
+    <div class="welcome-hero">
+      <div class="hero-title">
+        <span class="material-symbols-outlined">smart_toy</span>
+        Session Refreshed!
+      </div>
+      <div class="hero-desc">
+        Chat context refreshed for ${currentRole} role. How can I help you and Leo today?
+      </div>
+    </div>`;
 }
 
 form.addEventListener("submit", async (ev) => {
@@ -1190,6 +1247,8 @@ form.addEventListener("submit", async (ev) => {
     b.textContent = "Error: " + e.message;
   }
 });
+
+checkUrlParams();
 </script>
 </body>
 </html>
