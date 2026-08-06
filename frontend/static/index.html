@@ -474,26 +474,34 @@
       </div>
     </div>
 
-    <!-- Family Live Feed Widget -->
+    <!-- Family Live Feed Widget (30-Day Window) -->
     <div class="dash-card">
       <div class="dash-title">
         <span>👥 Family Activity Feed</span>
-        <span class="material-symbols-outlined" style="font-size:1rem;">sync</span>
+        <span class="material-symbols-outlined" style="font-size:1rem;">history</span>
+      </div>
+      <div style="font-size:0.75rem; color:var(--accent-light); margin-bottom:0.6rem; display:flex; align-items:center; gap:0.3rem; background:var(--accent-glow); padding:0.3rem 0.6rem; border-radius:8px; border:1px solid var(--accent);">
+        <span class="material-symbols-outlined" style="font-size:0.9rem;">verified</span>
+        Showing Last 30 Days • Full DB Retention
       </div>
       <div class="feed-list">
         <div class="feed-item">
           <div class="feed-avatar">M</div>
-          <div><strong>Mom</strong> logged breakfast (250 kcal) <br><span style="font-size:0.75rem; color:var(--text-secondary);">8:15 AM</span></div>
+          <div><strong>Mom</strong> logged breakfast (250 kcal) <br><span style="font-size:0.75rem; color:var(--text-secondary);">Today @ 8:15 AM</span></div>
         </div>
         <div class="feed-item">
           <div class="feed-avatar" style="background:#8b5cf6;">D</div>
-          <div><strong>Dad</strong> added Dr. XYZ appointment <br><span style="font-size:0.75rem; color:var(--text-secondary);">9:30 AM</span></div>
+          <div><strong>Dad</strong> added Dr. XYZ appointment <br><span style="font-size:0.75rem; color:var(--text-secondary);">Today @ 9:30 AM</span></div>
         </div>
         <div class="feed-item">
           <div class="feed-avatar" style="background:#ec4899;">S</div>
-          <div><strong>Sarah (PT)</strong> completed Physical Therapy <br><span style="font-size:0.75rem; color:var(--text-secondary);">11:00 AM</span></div>
+          <div><strong>Sarah (PT)</strong> completed Physical Therapy <br><span style="font-size:0.75rem; color:var(--text-secondary);">Today @ 11:00 AM</span></div>
         </div>
       </div>
+      <button type="button" class="header-btn" style="width:100%; justify-content:center; margin-top:0.6rem; font-size:0.82rem;" onclick="sendQuick('Show me all medication and therapy logs from the last 30 days')">
+        <span class="material-symbols-outlined" style="font-size:0.9rem;">list_alt</span>
+        Query 30-Day Care Logs
+      </button>
     </div>
 
     <!-- Upcoming Medical Appointments Widget -->

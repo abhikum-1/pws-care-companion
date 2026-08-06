@@ -104,30 +104,34 @@ def get_child_profile() -> str:
     )
 
 
-def get_medication_logs() -> str:
-    """Retrieves recent medication and Growth Hormone injection logs from Firestore."""
+def get_medication_logs(days: int = 30) -> str:
+    """Retrieves medication and Growth Hormone injection logs from Firestore for the specified timeframe (default: last 30 days)."""
+    cutoff = (datetime.date.today() - datetime.timedelta(days=days)).isoformat()
     docs = db.collection("pws_medication_logs").stream()
-    logs = [doc.to_dict() for doc in docs]
+    all_logs = [doc.to_dict() for doc in docs]
+    logs = [l for l in all_logs if l.get('date', '') >= cutoff or not l.get('date')]
     if not logs:
-        return "No medication logs found."
+        return f"No medication logs found in the last {days} days. (Total historical database records: {len(all_logs)})."
     res = [
         f"- {l.get('medication_name')} ({l.get('dose')}): Administered on {l.get('date')} at {l.get('time_administered')} by {l.get('administered_by')}."
         for l in logs
     ]
-    return "Medication Logs:\n" + "\n".join(res)
+    return f"Medication Logs (Last {days} Days Window - {len(logs)} of {len(all_logs)} DB entries):\n" + "\n".join(res)
 
 
-def get_therapy_logs() -> str:
-    """Retrieves therapy progress and session logs (Physical, Occupational, Speech, Behavioral) from Firestore."""
+def get_therapy_logs(days: int = 30) -> str:
+    """Retrieves therapy progress and session logs (Physical, Occupational, Speech, Behavioral) from Firestore for the specified timeframe (default: last 30 days)."""
+    cutoff = (datetime.date.today() - datetime.timedelta(days=days)).isoformat()
     docs = db.collection("pws_therapy_logs").stream()
-    logs = [doc.to_dict() for doc in docs]
+    all_logs = [doc.to_dict() for doc in docs]
+    logs = [l for l in all_logs if l.get('date', '') >= cutoff or not l.get('date')]
     if not logs:
-        return "No therapy logs found."
+        return f"No therapy logs found in the last {days} days. (Total historical database records: {len(all_logs)})."
     res = [
         f"- {l.get('therapy_type')} ({l.get('duration_minutes')} mins) on {l.get('date')}: {l.get('notes')} Accomplishment: {l.get('accomplishment', '')}"
         for l in logs
     ]
-    return "Therapy Logs:\n" + "\n".join(res)
+    return f"Therapy Logs (Last {days} Days Window - {len(logs)} of {len(all_logs)} DB entries):\n" + "\n".join(res)
 
 
 # --- FIRESTORE WRITE TOOLS ---
